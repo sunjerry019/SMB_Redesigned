@@ -1,0 +1,38 @@
+add archive traversing code
+delta code to notify also
+put in title in notif
+
+add an update check every load
+http://messages.hci.edu.sg/cgi-bin/emb/user_list.pl?dummy
+http://messages.hci.edu.sg/cgi-bin/emb/user_grouping.pl?dummy
+http://messages.hci.edu.sg/cgi-bin/emb/user_update.pl?dummy
+http://messages.hci.edu.sg/cgi-bin/emb/menu.pl?college_psb--%3ES9870684D
+
+footer stuck to bottom if not enuf messages
+
+customize colours/settings
+
+after reading also need to move the messages KIV? feels weird
+
+tooltip at refresh if got new messages
+
+
+attachments are show in boxes rather than simple links
+mark messages put at top
+need response put nicely in a form
+put in date/viewer info, etc
+open in larger window
+
+reduce footer height to increase message height
+
+add post btn
+
+change GM_setvalue blah to localstorage
+
+http://www.planwallpaper.com/static/images/colorful-triangles-background_yB0qTG6.jpg
+
+select, deselect all
+
+i forsee that anyone with a screen <= 1366*768 needs to run the thing with 90% zoom
+
+make a loop to extend inner objects then outer: innerExtend()
