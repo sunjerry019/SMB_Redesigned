@@ -17,7 +17,6 @@ after reading also need to move the messages KIV? feels weird
 tooltip at refresh if got new messages
 
 
-attachments are show in boxes rather than simple links
 mark messages put at top
 need response put nicely in a form
 put in date/viewer info, etc
@@ -34,5 +33,3 @@ http://www.planwallpaper.com/static/images/colorful-triangles-background_yB0qTG6
 select, deselect all
 
 i forsee that anyone with a screen <= 1366*768 needs to run the thing with 90% zoom
-
-make a loop to extend inner objects then outer: innerExtend()

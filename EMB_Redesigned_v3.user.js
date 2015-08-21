@@ -2,11 +2,11 @@
 // @name        	SMB Redesigned v3
 // @namespace   	http://eccube.tk/
 // @include     	http://messages.hci.edu.sg/
-// @include			http://messages.hci.edu.sg/*
+// @include			  http://messages.hci.edu.sg/*
 // @require     	http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js
-// @require			https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js
+// @require			  https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js
 // @version     	3.14.15
-// @description	    SMB with a new look, made for browsers that support more than IE
+// @description   SMB with a new look, made for browsers that support more than IE
 // ==/UserScript==
 // License: CC BY 4.0 http://creativecommons.org/licenses/by/4.0/
 
@@ -23,8 +23,8 @@ var globalTImer;
 
 //default values
 var defaultColours = {
-	"nav" : "",
-	"footer": "",
+    "nav" : "",
+    "footer": "",
     "loaderMain":
     {
         "main": "deep-orange darken-4",
@@ -35,7 +35,7 @@ var defaultColours = {
         "main": "amber",
         "accent": "pink"
     },
-	"background": "#EDE8E4" //this can actually be an image, use url instead, and relevant css settings
+    "background": "#EDE8E4" //this can actually be an image, use url instead, and relevant css settings
 }
 
 var defaultSettings = {
@@ -47,8 +47,8 @@ var defaultSettings = {
 }
 
 //init
-var colours = (typeof(localStorage["colours"]) != "undefined") ? $.extend(defaultColours, $.parseJSON(localStorage["colours"])) : defaultColours;
-var settings = (typeof(localStorage["settings"]) != "undefined") ? $.extend(defaultSettings, $.parseJSON(localStorage["settings"])) : defaultSettings;
+var colours = (typeof(localStorage["colours"]) != "undefined") ? objectExtend(defaultColours, $.parseJSON(localStorage["colours"])) : defaultColours;
+var settings = (typeof(localStorage["settings"]) != "undefined") ? objectExtend(defaultSettings, $.parseJSON(localStorage["settings"])) : defaultSettings;
 
 //begin code
 function getPage()
@@ -56,6 +56,26 @@ function getPage()
     var a = window.location.href.split('/');
     var aa = a[a.length-1].split('?')[0];
     return a[a.length-2]+aa+' '+a[3];
+}
+
+//utils
+function objectExtend(objTarget, obj)
+{
+    //checks only 1 layer deep
+    for (var key in obj) {
+        if (obj.hasOwnProperty(key)) {
+            if(typeof(obj[key]) == "object")
+            {
+                if(typeof(objTarget[key]) != "undefined")
+                {
+                    var mergedObj  = $.extend(objTarget[key], obj[key]);
+                    obj[key] = mergedObj;
+                }
+            }
+        }
+    }
+    
+    return $.extend(objTarget, obj);
 }
 
 function grabData(type)
@@ -631,7 +651,7 @@ function startMain(viewpl)
    		if(typeof(infos.errorReason) != "undefined")
    		{
    			errorMsg = " <i>(Error: ";
-   			errorMsg += infos.errorReason.errowThrown;
+   			errorMsg += infos.errorReason.errorThrown;
    			errorMsg += ")</i>";
    		}
    		else if(typeof(infos.topbar.errorReason) != "undefined") //if there is an error in the first ajax, the second ajax wouldn't be called, because it will definitely be timed out
@@ -804,14 +824,16 @@ function startMain(viewpl)
 	   	//content
 	   	extraCSS.push(".main {position: relative; margin: 20px 30px 0px 30px;}");
 	   	extraCSS.push(".msgs {transition: all 0.3s ease-in-out;}"); //0.55s cubic-bezier(0.19, 1, 0.22, 1);}
-	   	extraCSS.push(".cnt{transition: all 0.25s ease-in-out; position: fixed; margin: 0.5rem 0px 1rem 20px; width: calc(66.6667% - 90px); top: calc(64px + 20px); bottom: calc(" + settings.footer.height + " + " + settings.footer.padding +" + " + settings.footer.padding + " + " + settings.footer.margin + "px); right: 50px;} "); //0.5s cubic-bezier(0.19, 1, 0.22, 1);
+	   	extraCSS.push(".cnt {transition: all 0.25s ease-in-out; position: fixed; margin: 0.5rem 0px 1rem 20px; width: calc(66.6667% - 90px); top: calc(64px + 20px); bottom: calc(" + settings.footer.height + " + " + settings.footer.padding +" + " + settings.footer.padding + " + " + settings.footer.margin + "); right: 50px;} "); //0.5s cubic-bezier(0.19, 1, 0.22, 1);
 	   	extraCSS.push(".cnt.hidden {width: 0px; box-shadow: none;}");
 	   	extraCSS.push(".cnt .row{transition: all 2s ease-in-out; opacity: 1; height: auto; position: relative;}"); //cubic-bezier(0.19, 1, 0.22, 1)
 	   	extraCSS.push(".cnt .row.hidden{opacity: 0; height: 0px;}");
 	   	extraCSS.push(".cnt .avt {height: 42px; display: inline-block; width: 42px; text-align: center; line-height: 42px; font-size: 22px; position: absolute; left: 20px; top: 20px;}");
         extraCSS.push(".cnt .cntcenter {margin-top: 0px;}");
-	   	extraCSS.push(".msgcontent {overflow-y: auto; height: calc(100% - " + settings.footer.height + " - " + settings.footer.padding +" - " + settings.footer.padding + " - " + settings.footer.margin + " - 5px) !important;}");
+	   	extraCSS.push(".msgcontent {overflow-y: auto; height: calc(100% - " + settings.footer.height + " - " + settings.footer.padding + " - " + settings.footer.padding + " - " + settings.footer.margin + " - 45px) !important;}"); //originally 5px
         extraCSS.push(".msgcontent .cntwrapper {height: 100%; padding: 20px 20px 0px 20px;}");
+        extraCSS.push(".msgcontent .cntwrapper a:hover {text-decoration: underline;}");
+        extraCSS.push(".msgcontent .cntwrapper .attachments a:hover {text-decoration: none;}");
         extraCSS.push(".msgHeader {margin-bottom: 0px;}");
 	   	extraCSS.push(".msgHeaderContent{padding: 10px 20px 20px 82px;}");
 	   	extraCSS.push(".msgHeaderTitle {font-size: 1.5em; margin-top: 5px; display: inline-block;}");
@@ -819,6 +841,13 @@ function startMain(viewpl)
 	   	extraCSS.push(".msgHeaderContent {border-bottom: 1px dashed #888;}");
         extraCSS.push(".padding {height: 0px; margin-top: 10px;}");
         extraCSS.push(".attachborder {height: 0px; border-top: 1px dashed #888; margin: 20px 0px;}");
+        extraCSS.push(".attachmentsHeader {margin-bottom: 1rem;}")
+        extraCSS.push(".attachments {margin-bottom: 30px;}");
+        extraCSS.push(".attach {background-color: #CDCDCD; padding: 10px; display: inline-block; width: calc(25% - 10px); margin-right: 10px; height: 110px; position: relative; transition: all 0.2s ease-in-out;}");
+        extraCSS.push(".attach:hover {background-color: #AAA;}");
+        extraCSS.push(".attachTitle {color: black; height: calc(100% - 32px); margin-bottom: 10px;}");
+        extraCSS.push(".attachSize {color: #444; display: block; line-height: 32px; margin-top: 10px; bottom: 10px; position: absolute; width: calc(100% - 20px);}");
+        extraCSS.push(".attachSize img {right: 5px; height: 32px; width: 32px; position: absolute;}");
 	   	
 	   	//footer
 	   	extraCSS.push("footer a:hover {text-decoration: underline; } ");
@@ -1091,7 +1120,7 @@ function init()
 
 function addMaterial()
 {
-	var materialCSS = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/css/materialize.min.css"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><style>.unselectable{-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;} .pointer{cursor:pointer;} .defaultCursor{cursor: default;} .grabbable:hover{cursor: grab;} .grabbable:active{cursor: grabbing;}</style>';
+	var materialCSS = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/css/materialize.min.css"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><style>html{zoom: 90%;} .unselectable{-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;} .pointer{cursor:pointer;} .defaultCursor{cursor: default;} .grabbable:hover{cursor: grab;} .grabbable:active{cursor: grabbing;}</style>';
 	$("head").append(materialCSS);
 	
 }
@@ -1138,12 +1167,17 @@ function fetchMessage(msgobj)
                 var x = $.trim($(this).text()).split(" - ");
                 attachobj.index = parseInt(x.shift().split(" ")[1]);
                 attachobj.name = x.join(" - ");
+                if(!($.trim(attachobj.name).length)) attachobj.name = "<i>Attach "+ attachobj.index +"</i>";
                 attachobj.type = attachobj.href.split(".").slice(-1).pop();
                 attachobj.size = $(this).next("font").text().replace(/(\(|\))/gi, "");
                 attachments.push(attachobj);
             });
             response.find("font[color=red]:contains('Attachments')").nextAll().remove();
             response.find("font[color=red]:contains('Attachments')").remove();
+            while($.trim(response.find("div *:not(img, p br):last").html()) == "")
+            {
+                response.find("div *:not(img, p br):last").remove();
+            }
             var messageContent = response.find("div").html();
 
             var head = [];
@@ -1165,11 +1199,16 @@ function fetchMessage(msgobj)
             if(attachments.length)
             {
                 body.push("<div class='attachborder'></div>");
-                body.push('<h6>Attachments</h6>');
-                body.push('<div class="attachments">');
+                body.push('<h5 class="attachmentsHeader unselectable">Attachments</h5>');
+                body.push('<div class="attachments unselectable">');
                 for(var i = 0, len = attachments.length; i < len; i++)
                 {
-
+                    var a = attachments[i]
+                    //might want to add download attribute (download="filename")
+                    body.push('<a class="attach" id="attach_' + a.index + '" title="' + a.name + '" href="' + a.href + '" target="_blank">');
+                    body.push("<div class='attachTitle'><span>" + a.name + "</span></div>");
+                    body.push("<span class='attachSize'>" + a.size + "<img src='"+ retImg(a.type) +"'></span>");
+                    body.push('</a>'); //close .attach
                 }
                 body.push('</div>'); //close .attachments
             }
@@ -1189,6 +1228,23 @@ function fetchMessage(msgobj)
             }
             $(".cnt").html(head.join("") + body.join(""));
             $(".row.hidden").removeClass("hidden");
+            $(".attachTitle").dotdotdot({
+                ellipsis : '... ',
+                wrap : 'word',
+                fallbackToLetter:  true,
+                after : null,
+                watch : false,
+                height : null,
+                tolerance : 0,
+                callback : function( isTruncated, orgContent ) {},
+                lastCharacter   : {
+                    /*  Remove these characters from the end of the truncated text. */
+                    remove: [ ' ', ',', ';', '.', '!', '?' ],
+                    /*  Don't add an ellipsis if this array contains 
+                    the last character of the truncated text. */
+                    noEllipsis: []
+                }
+            });
             $("#msgloader").remove();
         }
         
@@ -1199,6 +1255,52 @@ function fetchMessage(msgobj)
     }).always(function() {});
     
     retrieving = false;
+}
+
+function retImg(type)
+{
+    var url = ""
+    if(browsername() == "firefox")
+    {
+        return "moz-icon://." + type + "?size=32";
+    }
+    else
+    {
+        url = "//ssl.gstatic.com/docs/doclist/images/mediatype/icon_1_";
+
+        if(/pdf/gi.test(type)) url += "pdf";
+        else if(/doc/gi.test(type)) url += "word";
+        else if(/xls/gi.test(type)) url += "excel";
+        else if(/(jpe?g|tif+|gif|bmp|png)/gi.test(type)) url += "image";
+        else if(/ppt/gi.test(type)) url += "powerpoint";
+        else if(/(zip|rar|7z)/gi.test(type)) url += "archive";
+        else if(/(mp3|wa?v|m4a|aif+|aac|og(g|a)|wma|vox)/.test(type)) url += "audio";
+        else if(/(mp4|mpe?g|m4v|webm|mkv|flv|vob|ogv|avi|mov|wmv)/.test(type)) url += "video";
+        //add more in time to come *****
+
+        url += "_x32.png";
+    }
+    return url;
+}
+
+function browsername()
+{
+    var isOpera = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+    // Opera 8.0+ (UA detection to detect Blink/v8-powered Opera)
+    var isFirefox = typeof InstallTrigger !== 'undefined';   // Firefox 1.0+
+    var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
+        // At least Safari 3+: "[object HTMLElementConstructor]"
+    var isChrome = !!window.chrome && !isOpera;              // Chrome 1+
+    var isIE = /*@cc_on!@*/false || !!document.documentMode; // At least IE6
+    //does not detect Edge
+
+    //credits: http://stackoverflow.com/questions/9847580/how-to-detect-safari-chrome-ie-firefox-and-opera-browser#9851769
+
+    if(isOpera) return "opera";
+    else if(isFirefox) return "firefox";
+    else if(isSafari) return "safari";
+    else if(isChrome) return "chrome";
+    else if(isIE) return "ie";
 }
 
 function refreshMessages(page, manual, options)
@@ -1380,6 +1482,14 @@ function getMessages(page, options)
 		//credit https://stackoverflow.com/questions/405409/use-jquery-selectors-on-ajax-loaded-html#7831229
 		
 		retu.error = /No such file or directory\)/gi.test(response.find("body").text());
+        if(/Illegal Attempt/gi.test(response.find("body").text()))
+        {
+            retu.error = true;
+            retu.errorReason = {
+                "textStatus": "",
+                "errorThrown": "Illegal Attempt"
+            }
+        }
 		
 		if(!retu.error)
 		{
@@ -1626,6 +1736,7 @@ function sscroll(id)
         scrollTop: $(id).offset().top - 70
     }, 500);
 }
+
 //notifying codes
 function notify(msg, title, icon) {
 
@@ -1953,9 +2064,23 @@ $(window).load(function()
 
 //forwardevents
 //credit: https://github.com/MichaelPote/jquery.forwardevents
-(function(g){function d(d,h,a,b){var g=a.type,l=a.originalEvent,k=a.target,m=a.relatedTarget;a.target=d[0];a.type=h;a.originalEvent=null;b&&(a.relatedTarget=b);d.trigger(a);a.type=g;a.originalEvent=l;a.target=k;a.relatedTarget=m}g.fn.forwardevents=function(r){var h=g.extend({enableMousemove:!1,dblClickThreshold:500,directEventsTo:null},r);return this.each(function(){var a=g(this),b,q,l,k=0,m=0;a.bind("mouseout",function(c){b&&d(b,"mouseout",c,a[0])}).bind("mousemove mousedown mouseup mousewheel",
+/*(function(g){function d(d,h,a,b){var g=a.type,l=a.originalEvent,k=a.target,m=a.relatedTarget;a.target=d[0];a.type=h;a.originalEvent=null;b&&(a.relatedTarget=b);d.trigger(a);a.type=g;a.originalEvent=l;a.target=k;a.relatedTarget=m}g.fn.forwardevents=function(r){var h=g.extend({enableMousemove:!1,dblClickThreshold:500,directEventsTo:null},r);return this.each(function(){var a=g(this),b,q,l,k=0,m=0;a.bind("mouseout",function(c){b&&d(b,"mouseout",c,a[0])}).bind("mousemove mousedown mouseup mousewheel",
 function(c){if(a.is(":visible")){var f=c.originalEvent,n=f.type,p=f.clientX,f=f.clientY,e;c.stopPropagation();null!=h.directEventsTo?e=h.directEventsTo:(a.hide(),e=g(document.elementFromPoint(p,f)),a.show());if(e)if((h.enableMousemove||"mousemove"!==n)&&d(e,n,c),b&&e[0]===b[0]){if("mouseup"==n){if(q!=p||l!=f||c.timeStamp-m>h.dblClickThreshold)k=0;q=p;l=f;m=c.timeStamp;d(e,"click",c);2==++k&&(d(e,"dblclick",c),k=0)}}else k=0,b&&d(b,"mouseout",c,e[0]),d(e,"mouseover",c,b?b[0]:a[0]);else d(b,"mouseout",
-c);b=e}})})}})(jQuery);
+c);b=e}})})}})(jQuery);*/
+
+/*
+ *  jQuery dotdotdot 1.7.4
+ *
+ *  Copyright (c) Fred Heusschen
+ *  www.frebsite.nl
+ *
+ *  Plugin website:
+ *  dotdotdot.frebsite.nl
+ *
+ *  Licensed under the MIT license.
+ *  http://en.wikipedia.org/wiki/MIT_License
+ */
+!function(t,e){function n(t,e,n){var r=t.children(),o=!1;t.empty();for(var i=0,d=r.length;d>i;i++){var l=r.eq(i);if(t.append(l),n&&t.append(n),a(t,e)){l.remove(),o=!0;break}n&&n.detach()}return o}function r(e,n,i,d,l){var s=!1,c="a, table, thead, tbody, tfoot, tr, col, colgroup, object, embed, param, ol, ul, dl, blockquote, select, optgroup, option, textarea, script, style",u="script, .dotdotdot-keep";return e.contents().detach().each(function(){var h=this,f=t(h);if("undefined"==typeof h)return!0;if(f.is(u))e.append(f);else{if(s)return!0;e.append(f),!l||f.is(d.after)||f.find(d.after).length||e[e.is(c)?"after":"append"](l),a(i,d)&&(s=3==h.nodeType?o(f,n,i,d,l):r(f,n,i,d,l),s||(f.detach(),s=!0)),s||l&&l.detach()}}),n.addClass("is-truncated"),s}function o(e,n,r,o,d){var c=e[0];if(!c)return!1;var h=s(c),f=-1!==h.indexOf(" ")?" ":"　",p="letter"==o.wrap?"":f,g=h.split(p),v=-1,w=-1,b=0,y=g.length-1;for(o.fallbackToLetter&&0==b&&0==y&&(p="",g=h.split(p),y=g.length-1);y>=b&&(0!=b||0!=y);){var m=Math.floor((b+y)/2);if(m==w)break;w=m,l(c,g.slice(0,w+1).join(p)+o.ellipsis),r.children().each(function(){t(this).toggle().toggle()}),a(r,o)?(y=w,o.fallbackToLetter&&0==b&&0==y&&(p="",g=g[0].split(p),v=-1,w=-1,b=0,y=g.length-1)):(v=w,b=w)}if(-1==v||1==g.length&&0==g[0].length){var x=e.parent();e.detach();var T=d&&d.closest(x).length?d.length:0;x.contents().length>T?c=u(x.contents().eq(-1-T),n):(c=u(x,n,!0),T||x.detach()),c&&(h=i(s(c),o),l(c,h),T&&d&&t(c).parent().append(d))}else h=i(g.slice(0,v+1).join(p),o),l(c,h);return!0}function a(t,e){return t.innerHeight()>e.maxHeight}function i(e,n){for(;t.inArray(e.slice(-1),n.lastCharacter.remove)>-1;)e=e.slice(0,-1);return t.inArray(e.slice(-1),n.lastCharacter.noEllipsis)<0&&(e+=n.ellipsis),e}function d(t){return{width:t.innerWidth(),height:t.innerHeight()}}function l(t,e){t.innerText?t.innerText=e:t.nodeValue?t.nodeValue=e:t.textContent&&(t.textContent=e)}function s(t){return t.innerText?t.innerText:t.nodeValue?t.nodeValue:t.textContent?t.textContent:""}function c(t){do t=t.previousSibling;while(t&&1!==t.nodeType&&3!==t.nodeType);return t}function u(e,n,r){var o,a=e&&e[0];if(a){if(!r){if(3===a.nodeType)return a;if(t.trim(e.text()))return u(e.contents().last(),n)}for(o=c(a);!o;){if(e=e.parent(),e.is(n)||!e.length)return!1;o=c(e[0])}if(o)return u(t(o),n)}return!1}function h(e,n){return e?"string"==typeof e?(e=t(e,n),e.length?e:!1):e.jquery?e:!1:!1}function f(t){for(var e=t.innerHeight(),n=["paddingTop","paddingBottom"],r=0,o=n.length;o>r;r++){var a=parseInt(t.css(n[r]),10);isNaN(a)&&(a=0),e-=a}return e}if(!t.fn.dotdotdot){t.fn.dotdotdot=function(e){if(0==this.length)return t.fn.dotdotdot.debug('No element found for "'+this.selector+'".'),this;if(this.length>1)return this.each(function(){t(this).dotdotdot(e)});var o=this;o.data("dotdotdot")&&o.trigger("destroy.dot"),o.data("dotdotdot-style",o.attr("style")||""),o.css("word-wrap","break-word"),"nowrap"===o.css("white-space")&&o.css("white-space","normal"),o.bind_events=function(){return o.bind("update.dot",function(e,d){switch(o.removeClass("is-truncated"),e.preventDefault(),e.stopPropagation(),typeof l.height){case"number":l.maxHeight=l.height;break;case"function":l.maxHeight=l.height.call(o[0]);break;default:l.maxHeight=f(o)}l.maxHeight+=l.tolerance,"undefined"!=typeof d&&(("string"==typeof d||"nodeType"in d&&1===d.nodeType)&&(d=t("<div />").append(d).contents()),d instanceof t&&(i=d)),g=o.wrapInner('<div class="dotdotdot" />').children(),g.contents().detach().end().append(i.clone(!0)).find("br").replaceWith("  <br />  ").end().css({height:"auto",width:"auto",border:"none",padding:0,margin:0});var c=!1,u=!1;return s.afterElement&&(c=s.afterElement.clone(!0),c.show(),s.afterElement.detach()),a(g,l)&&(u="children"==l.wrap?n(g,l,c):r(g,o,g,l,c)),g.replaceWith(g.contents()),g=null,t.isFunction(l.callback)&&l.callback.call(o[0],u,i),s.isTruncated=u,u}).bind("isTruncated.dot",function(t,e){return t.preventDefault(),t.stopPropagation(),"function"==typeof e&&e.call(o[0],s.isTruncated),s.isTruncated}).bind("originalContent.dot",function(t,e){return t.preventDefault(),t.stopPropagation(),"function"==typeof e&&e.call(o[0],i),i}).bind("destroy.dot",function(t){t.preventDefault(),t.stopPropagation(),o.unwatch().unbind_events().contents().detach().end().append(i).attr("style",o.data("dotdotdot-style")||"").data("dotdotdot",!1)}),o},o.unbind_events=function(){return o.unbind(".dot"),o},o.watch=function(){if(o.unwatch(),"window"==l.watch){var e=t(window),n=e.width(),r=e.height();e.bind("resize.dot"+s.dotId,function(){n==e.width()&&r==e.height()&&l.windowResizeFix||(n=e.width(),r=e.height(),u&&clearInterval(u),u=setTimeout(function(){o.trigger("update.dot")},100))})}else c=d(o),u=setInterval(function(){if(o.is(":visible")){var t=d(o);(c.width!=t.width||c.height!=t.height)&&(o.trigger("update.dot"),c=t)}},500);return o},o.unwatch=function(){return t(window).unbind("resize.dot"+s.dotId),u&&clearInterval(u),o};var i=o.contents(),l=t.extend(!0,{},t.fn.dotdotdot.defaults,e),s={},c={},u=null,g=null;return l.lastCharacter.remove instanceof Array||(l.lastCharacter.remove=t.fn.dotdotdot.defaultArrays.lastCharacter.remove),l.lastCharacter.noEllipsis instanceof Array||(l.lastCharacter.noEllipsis=t.fn.dotdotdot.defaultArrays.lastCharacter.noEllipsis),s.afterElement=h(l.after,o),s.isTruncated=!1,s.dotId=p++,o.data("dotdotdot",!0).bind_events().trigger("update.dot"),l.watch&&o.watch(),o},t.fn.dotdotdot.defaults={ellipsis:"... ",wrap:"word",fallbackToLetter:!0,lastCharacter:{},tolerance:0,callback:null,after:null,height:null,watch:!1,windowResizeFix:!0},t.fn.dotdotdot.defaultArrays={lastCharacter:{remove:[" ","　",",",";",".","!","?"],noEllipsis:[]}},t.fn.dotdotdot.debug=function(){};var p=1,g=t.fn.html;t.fn.html=function(n){return n!=e&&!t.isFunction(n)&&this.data("dotdotdot")?this.trigger("update",[n]):g.apply(this,arguments)};var v=t.fn.text;t.fn.text=function(n){return n!=e&&!t.isFunction(n)&&this.data("dotdotdot")?(n=t("<div />").text(n).html(),this.trigger("update",[n])):v.apply(this,arguments)}}}(jQuery);
 
 
 //htmlentities
