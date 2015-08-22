@@ -2,9 +2,9 @@
 // @name        	SMB Redesigned v3
 // @namespace   	http://eccube.tk/
 // @include     	http://messages.hci.edu.sg/
-// @include			  http://messages.hci.edu.sg/*
+// @include			http://messages.hci.edu.sg/*
 // @require     	http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js
-// @require			  https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js
+// @require			https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js
 // @version     	3.14.15
 // @description   SMB with a new look, made for browsers that support more than IE
 // ==/UserScript==
@@ -835,6 +835,7 @@ function startMain(viewpl)
         extraCSS.push(".msgcontent .cntwrapper a:hover {text-decoration: underline;}");
         extraCSS.push(".msgcontent .cntwrapper .attachments a:hover {text-decoration: none;}");
         extraCSS.push(".msgHeader {margin-bottom: 0px;}");
+        extraCSS.push(".msgdate {color: #777;}")
 	   	extraCSS.push(".msgHeaderContent{padding: 10px 20px 20px 82px;}");
 	   	extraCSS.push(".msgHeaderTitle {font-size: 1.5em; margin-top: 5px; display: inline-block;}");
 	   	extraCSS.push(".msgHeaderContent p {margin: 0px;}");
@@ -1122,7 +1123,6 @@ function addMaterial()
 {
 	var materialCSS = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/css/materialize.min.css"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><style>html{zoom: 90%;} .unselectable{-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;} .pointer{cursor:pointer;} .defaultCursor{cursor: default;} .grabbable:hover{cursor: grab;} .grabbable:active{cursor: grabbing;}</style>';
 	$("head").append(materialCSS);
-	
 }
 
 //Other functions
@@ -1186,7 +1186,7 @@ function fetchMessage(msgobj)
             head.push('<div class="row msgheader hidden">');
             head.push('<span class="circle avt unselectable defaultCursor" style="background-color: ' + getColourfromText(msgobj.abbrname) + '; color: white">'+ msgobj.abbrname[0].toUpperCase() +'</span>');
             head.push('<div class="msgHeaderContent"><span class="msgHeaderTitle">' + msgobj.title + '</span>');
-            head.push('<p>From: ' + msgobj.fullname + '<br>To: ' + msgobj.attention + '</p>');
+            head.push('<p>From: ' + msgobj.fullname + ' <span class="msgdate">/ ' + msgobj.date + '</span><br>To: ' + msgobj.attention + '</p>');
             head.push("</div>"); //close .msgHeaderContent
             head.push('</div>'); //close .msgheader
             
@@ -1205,7 +1205,7 @@ function fetchMessage(msgobj)
                 {
                     var a = attachments[i]
                     //might want to add download attribute (download="filename")
-                    body.push('<a class="attach" id="attach_' + a.index + '" title="' + a.name + '" href="' + a.href + '" target="_blank">');
+                    body.push('<a class="attach" id="attach_' + a.index + '" title="' + a.name +"." + a.type + '" href="' + a.href + '" target="_blank">');
                     body.push("<div class='attachTitle'><span>" + a.name + "</span></div>");
                     body.push("<span class='attachSize'>" + a.size + "<img src='"+ retImg(a.type) +"'></span>");
                     body.push('</a>'); //close .attach
@@ -1518,6 +1518,7 @@ function getMessages(page, options)
 								case 2:
 									message.abbrname = $.trim($(this).text());
 									message.fullname = $(this).find("abbr").attr("title");
+                                    if(!$.trim(message.fullname).length) message.fullname = message.abbrname;
 									break;
 								case 3:
 									//escape all the names
