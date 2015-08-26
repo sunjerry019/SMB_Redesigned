@@ -33,3 +33,6 @@ http://www.planwallpaper.com/static/images/colorful-triangles-background_yB0qTG6
 select, deselect all
 
 i forsee that anyone with a screen <= 1366*768 needs to run the thing with 90% zoom
+
+detect links and change
+EMB Help link nt working

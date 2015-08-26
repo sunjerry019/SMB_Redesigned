@@ -49,6 +49,10 @@ var defaultSettings = {
 //init
 var colours = (typeof(localStorage["colours"]) != "undefined") ? objectExtend(defaultColours, $.parseJSON(localStorage["colours"])) : defaultColours;
 var settings = (typeof(localStorage["settings"]) != "undefined") ? objectExtend(defaultSettings, $.parseJSON(localStorage["settings"])) : defaultSettings;
+var link_regex = /(([a-z]+:\/\/)?(([a-z0-9\-]+\.)+([a-z]{2}|aero|arpa|biz|com|coop|edu|gov|info|int|jobs|mil|museum|name|nato|net|org|pro|travel|local|internal))(:[0-9]{1,5})?(\/[a-z0-9_\-\.~]+)*(\/([a-z0-9_\-\.]*)(\?[a-z0-9+_\-\.%=&amp;]*)?)?(#[a-zA-Z0-9!$&'()*+.=-_~:@/?]*)?)(\s+|$)/gi; //link_regex.test("http://a.a.com/asd.tiff") returns false
+//credit: stackoverflow.com/questions/1500260/detect-urls-in-text-with-javascript
+var email_regex = /([-!#-'*+/-9=?A-Z^-~]+(\.[-!#-'*+/-9=?A-Z^-~]+)*|"([]!#-[^-~ \t]|(\\[\t -~]))+")@[0-9A-Za-z]([0-9A-Za-z-]{0,61}[0-9A-Za-z])?(\.[0-9A-Za-z]([0-9A-Za-z-]{0,61}[0-9A-Za-z])?)+/gi; //' //terminates string literal that sublime falsely recognizes
+//credit http://stackoverflow.com/questions/201323/using-a-regular-expression-to-validate-an-email-address/14075810#14075810
 
 //begin code
 function getPage()
@@ -783,7 +787,7 @@ function startMain(viewpl)
 					+ ' ' + (infos.topbar.lastlogin.hour < 10 ? '0' : '') + infos.topbar.lastlogin.hour
 					+ ':' + (infos.topbar.lastlogin.minutes < 10 ? '0' : '') + infos.topbar.lastlogin.minutes
                     + ((infos.posted > 0) ? ('<span class="center messagesposted defaultCursor">' + infos.posted + ' message' + ((infos.posted > 1) ? "s" : "") + ' ' + ((infos.posted > 1) ? "were" : "was") + ' posted today.</span>') : '<span class="center messagesposted defaultCursor">No messages were posted today.</span>')
-					+'<a class="grey-text text-lighten-4 right" href="' + infos.topbar.help + '">EMB Help</a></div></div>');
+					+'<a class="grey-text text-lighten-4 right pointer" href="' + infos.topbar.help + '">EMB Help</a></div></div>');
 	   	body.push('</footer>');
 	   	
 	   	//extracss
@@ -1121,7 +1125,7 @@ function init()
 
 function addMaterial()
 {
-	var materialCSS = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/css/materialize.min.css"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><style>html{zoom: 90%;} .unselectable{-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;} .pointer{cursor:pointer;} .defaultCursor{cursor: default;} .grabbable:hover{cursor: grab;} .grabbable:active{cursor: grabbing;}</style>';
+	var materialCSS = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/css/materialize.min.css"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><style>@media only screen and (max-width:1366px) { html{zoom: 90%;} } .unselectable{-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;} .pointer{cursor: pointer;} .defaultCursor{cursor: default;} .grabbable:hover{cursor: grab;} .grabbable:active{cursor: grabbing;}</style>';
 	$("head").append(materialCSS);
 }
 
@@ -1178,6 +1182,10 @@ function fetchMessage(msgobj)
             {
                 response.find("div *:not(img, p br):last").remove();
             }
+            response.find("div *").each(function(id){
+                
+
+            });
             var messageContent = response.find("div").html();
 
             var head = [];
@@ -1186,7 +1194,7 @@ function fetchMessage(msgobj)
             head.push('<div class="row msgheader hidden">');
             head.push('<span class="circle avt unselectable defaultCursor" style="background-color: ' + getColourfromText(msgobj.abbrname) + '; color: white">'+ msgobj.abbrname[0].toUpperCase() +'</span>');
             head.push('<div class="msgHeaderContent"><span class="msgHeaderTitle">' + msgobj.title + '</span>');
-            head.push('<p>From: ' + msgobj.fullname + ' <span class="msgdate">/ ' + msgobj.date + '</span><br>To: ' + msgobj.attention + '</p>');
+            head.push('<p>From: ' + msgobj.fullname + '<span class="msgdate"> / ' + msgobj.date + '</span><br>To: ' + msgobj.attention + '</p>');
             head.push("</div>"); //close .msgHeaderContent
             head.push('</div>'); //close .msgheader
             
@@ -1199,7 +1207,7 @@ function fetchMessage(msgobj)
             if(attachments.length)
             {
                 body.push("<div class='attachborder'></div>");
-                body.push('<h5 class="attachmentsHeader unselectable">Attachments</h5>');
+                body.push('<h5 class="attachmentsHeader unselectable defaultCursor">Attachments</h5>');
                 body.push('<div class="attachments unselectable">');
                 for(var i = 0, len = attachments.length; i < len; i++)
                 {
