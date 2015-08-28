@@ -7,3 +7,4 @@ To use, install Greasemonkey or Tampermonkey before installing the userscript.
 Made 2015
 
 USE AT YOUR OWN RISK.
+WE ARE NOT LIABLE FOR YOU USE OF THIS SCRIPT.
