@@ -6,7 +6,7 @@
 // @require     	http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js
 // @require			https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js
 // @version     	3.14.15
-// @description   SMB with a new look, made for browsers that support more than IE
+// @description     SMB with a new look, made for browsers that support more than IE
 // ==/UserScript==
 // License: CC BY 4.0 http://creativecommons.org/licenses/by/4.0/
 
@@ -720,7 +720,7 @@ function startMain(viewpl)
 
 		if(infos.topbar.exit) body.push('<li><a id="otherBoards" href="' + infos.topbar.exit + '" title="Exit to Other Boards"><i class="material-icons unselectable">toc</i></a></li>');
 
-        body.push('<li class="pointer"><a class="dropdown-button" data-activates="extra" title="More"><i class="material-icons right">more_vert</i></a></li>');
+        body.push('<li class="pointer unselectable"><a class="dropdown-button" data-activates="extra" title="More"><i class="material-icons right">more_vert</i></a></li>');
 
    		body.push('</ul></div></nav></div>');
    		console.log("Topbar OK");
@@ -752,7 +752,7 @@ function startMain(viewpl)
 	   				if(!(sortedMessages.imptUnread.length + sortedMessages.impt.length))
 	   				{
 	   					console.log("No new messages");
-	   					body.push('<li class="collection-item impt nonewmessages"><p class="center">&mdash; No new messages &mdash;</p></li>');
+	   					body.push('<li class="collection-item impt nonewmessages unselectable"><p class="center">&mdash; No new messages &mdash;</p></li>');
 	   					console.log("pushed");
 	   				}
 	   				body.push('<li class="collection-header"><h5 class="unselectable"><i class="material-icons">chat</i> Normal Messages</h5></li>');
@@ -773,7 +773,7 @@ function startMain(viewpl)
 	   				console.log("Type is normal. checking whether there were no messages");
 	   				if(!(sortedMessages.normalUnread.length + sortedMessages.normal.length))
 	   				{
-	   					body.push('<li class="collection-item normal nonewmessages"><p class="center">&mdash; No new messages &mdash;</p></li>');
+	   					body.push('<li class="collection-item normal nonewmessages unselectable"><p class="center">&mdash; No new messages &mdash;</p></li>');
 	   				}
    				}
 				body.push("</div>");
@@ -801,8 +801,8 @@ function startMain(viewpl)
 					+ '-' + (infos.topbar.lastlogin.day < 10 ? '0' : '') + infos.topbar.lastlogin.day
 					+ ' ' + (infos.topbar.lastlogin.hour < 10 ? '0' : '') + infos.topbar.lastlogin.hour
 					+ ':' + (infos.topbar.lastlogin.minutes < 10 ? '0' : '') + infos.topbar.lastlogin.minutes
-                    + ((infos.posted > 0) ? ('<span class="center messagesposted defaultCursor">' + infos.posted + ' message' + ((infos.posted > 1) ? "s" : "") + ' ' + ((infos.posted > 1) ? "were" : "was") + ' posted today.</span>') : '<span class="center messagesposted defaultCursor">No messages were posted today.</span>')
-					+'<a class="grey-text text-lighten-4 right pointer" href="' + infos.topbar.help + '">EMB Help</a></div></div>');
+                    + ((infos.posted > 0) ? ('<span class="center messagesposted defaultCursor noPointerEvents">' + infos.posted + ' message' + ((infos.posted > 1) ? "s" : "") + ' ' + ((infos.posted > 1) ? "were" : "was") + ' posted today.</span>') : '<span class="center messagesposted defaultCursor noPointerEvents">No messages were posted today.</span>')
+					+'<a class="grey-text text-lighten-4 right pointer" href="' + infos.topbar.help + '" title="EMB Help">EMB Help</a></div></div>');
 	   	body.push('</footer>');
 	   	
 	   	//extracss
@@ -857,7 +857,7 @@ function startMain(viewpl)
 	   	extraCSS.push(".cnt .row.hidden{opacity: 0; height: 0px;}");
 	   	extraCSS.push(".cnt .avt {height: 42px; display: inline-block; width: 42px; text-align: center; line-height: 42px; font-size: 22px; position: absolute; left: 20px; top: 20px;}");
         extraCSS.push(".cnt .cntcenter {margin-top: 0px;}");
-	   	extraCSS.push(".msgcontent {overflow-y: auto; height: calc(100% - " + settings.footer.height + " - " + settings.footer.padding + " - " + settings.footer.padding + " - " + settings.footer.margin + " - 45px) !important;}"); //originally 5px
+	   	extraCSS.push(".msgcontent {overflow-y: auto; height: calc(100% - " + settings.footer.height + " - " + settings.footer.padding + " - " + settings.footer.padding + " - " + settings.footer.margin + " - 45px - 35px) !important;}"); //originally 5px
         extraCSS.push(".msgcontent .cntwrapper {height: 100%; padding: 20px 20px 0px 20px;}");
         extraCSS.push(".msgcontent .cntwrapper a:hover {text-decoration: underline;}");
         extraCSS.push(".msgcontent .cntwrapper .attachments a:hover {text-decoration: none;}");
@@ -876,6 +876,7 @@ function startMain(viewpl)
         extraCSS.push(".attachTitle {color: black; height: calc(100% - 32px); margin-bottom: 10px;}");
         extraCSS.push(".attachSize {color: #444; display: block; line-height: 32px; margin-top: 10px; bottom: 10px; position: absolute; width: calc(100% - 20px);}");
         extraCSS.push(".attachSize img {right: 5px; height: 32px; width: 32px; position: absolute;}");
+        extraCSS.push(".choicesRadioOption {display: inline-block; padding-right: 10px; padding-bottom: 5px; border-bottom: 1px solid #ccc;}");
 	   	
 	   	//footer
 	   	extraCSS.push("footer a:hover {text-decoration: underline; } ");
@@ -999,13 +1000,13 @@ function startMain(viewpl)
 			$(ele).html("filter_tilt_shift");
 			$(ele).addClass("spin");
 		
-			//do ajax to mark message ===================================ISSUES HERE========================================
+			//do ajax to mark message
 			var jqxhr = $.ajax({
 				url: "/cgi-bin/emb/choice.pl?view.pl?date??",
 				method: "POST", 
 				data: { 
 					'msgid': ele.dataset.msgid,
-					'choice': "Back/Submit",
+					//'choice': "Back/Submit",
 					'attn': ( currentlyMarked ? "B" : "A" ) /*A is yes, B is no*/
 				}
 			}).done(function(res, textStatus, jqXHR){
@@ -1022,6 +1023,11 @@ function startMain(viewpl)
 					$(ele).html("star");
 					$(ele).addClass("activated");
 				}
+
+                var obj = $.parseJSON(he.decode($("#msg_" + ele.dataset.msgid).dataset.obj));
+                obj.marked = !obj.marked;
+                $("#msg_" + ele.dataset.msgid).dataset.obj = he.encode(JSON.stringify(msgobj), {'useNamedReferences': true});
+
 			}).fail(function(jqXHR, textStatus, errorThrown) {
 				//console.log(textStatus);
 				$(ele).removeClass("spin");
@@ -1151,8 +1157,11 @@ function init()
 
 function addMaterial()
 {
-	var materialCSS = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/css/materialize.min.css"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><style>@media only screen and (max-width:1366px) { html{zoom: 90%;} } .unselectable{-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;} .pointer{cursor: pointer;} .defaultCursor{cursor: default;} .grabbable:hover{cursor: grab;} .grabbable:active{cursor: grabbing;}</style>';
-	$("head").append(materialCSS);
+	var materialCSS = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/css/materialize.min.css"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><style>@media only screen and (max-width:1366px) { html{zoom: 90%;} } .unselectable{-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;} .pointer{cursor: pointer;} .defaultCursor{cursor: default;} .grabbable:hover{cursor: grab;} .grabbable:active{cursor: grabbing;} .noPointerEvents {pointer-events: none;}</style>';
+
+    //var toastCSS = '<style>@media only screen and (min-width : 601px) and (max-width : 1260px) {.toast {width: 100%;border-radius: 0;} }@media only screen and (min-width : 1261px) {.toast {width: 100%;border-radius: 0; } }@media only screen and (min-width : 601px) and (max-width : 1260px) {#toast-container {min-width: 100%;bottom: 0%;top: 90%;right: 0%;left: 0%;} }@media only screen and (min-width : 1261px) {#toast-container {min-width: 100%;bottom: 0%;top: 90%;right: 0%;left: 0%; } } .toasted {margin: 0px 20px; width:calc(100% - 40px); position: fixed;}</style>';
+
+	$("head").append(materialCSS); //.append(toastCSS);
 }
 
 //Other functions
@@ -1179,6 +1188,8 @@ function fetchMessage(msgobj)
     }).done(function(data){
         var response = $('<html />').html(data);
         //credit https://stackoverflow.com/questions/405409/use-jquery-selectors-on-ajax-loaded-html#7831229
+        var needResponse = false;
+        var recordedResponses = false;
         var error = false;
         error = /No such file or directory\)/gi.test(response.find("body").text());
         
@@ -1190,6 +1201,16 @@ function fetchMessage(msgobj)
             response.find("hr").remove();
             response.find("font:lt(2)").remove();
             response.find("p:first-child").css("margin-top", "0px");
+            //extract bottom form
+            needResponse = (response.find("form [name=choice]").length > 1);
+            if(needResponse)
+            {
+                var c = response.find("form [name=choice]:checked");
+                recordedResponses = {
+                    "choice" : (c.length ? c.val() : false),
+                    "remark" : response.find("form [name=remark]").val()
+                };
+            }
             response.find("form").remove();
             response.find("font[color=red]:contains('Attachments')").nextAll("a").each(function(idx){
                 var attachobj = {};
@@ -1208,10 +1229,7 @@ function fetchMessage(msgobj)
             {
                 response.find("div *:not(img, p br):last").remove();
             }
-            response.find("div *").each(function(id){
-                
-
-            });
+            //response.find("div *").each(function(id){});
             var messageContent = response.find("div").html();
 
             var head = [];
@@ -1251,6 +1269,40 @@ function fetchMessage(msgobj)
                 body.push("<div class='padding'></div>");
             }
 
+            if(needResponse)
+            {
+                //generate the form for response
+                //generate the options A thru E
+                body.push("<div class='attachborder'></div>");
+                body.push('<div class="row">');
+                body.push('<form id="choiceForm" class="col s8">');
+                for(var i = 0; i < 5; i++)
+                {
+                    var letter = String.fromCharCode(65 + i); //obtains A thru E
+                    body.push('<div class="choicesRadioOption">');
+                    body.push('<input name="choice" type="radio" id="choice_'+ letter +'" value="' + letter + '" ' + ((recordedResponses.choice == letter) ? "checked" : "") + '/>'); //class="with-gap"
+                    body.push('<label for="choice_' + letter + '">' + letter + '</label>');
+                    body.push('</div>');
+                }
+
+                //adds option to reset
+                body.push('<div class="choicesRadioOption">');
+                body.push('<input name="choice" type="radio" id="choice_'+ 'indeterminate' +'" value="' + 0 + '" ' + ((!recordedResponses.choice) ? "checked" : "") + '/>'); //class="with-gap"
+                body.push('<label for="choice_' + 'indeterminate' + '">' + "No Choice" + '</label>');
+                body.push('</div>');
+
+                body.push('<div class="input-field">');
+                body.push('<textarea id="remark" name="remark" class="materialize-textarea">' + recordedResponses.remark +'</textarea>');
+                body.push('<label for="textarea1" class="unselectable defaultCursor noPointerEvents">Response Box</label>');
+                body.push('</div>'); //close .input-field
+                body.push('<button class="btn waves-effect waves-light" type="submit" name="action">Submit</button>');
+                body.push("</form>");
+                body.push('</div>');
+
+                //body.push("<div class='padding'></div>");
+            }
+            //else if(attachments.length) body.push("<div class='padding'></div>");
+
             body.push('</div>'); //close .cntwrapper
             body.push('</div>'); //close .msgcontent
             
@@ -1279,13 +1331,51 @@ function fetchMessage(msgobj)
                     noEllipsis: []
                 }
             });
+            $("#choiceForm").on('submit', function(e){
+                var latestObject = $.parseJSON(he.decode($("#msg_" + msgobj.uid).attr("data-obj")));
+                var attn = latestObject.marked ? "A" : "B"; //"A" is yes, "B" is no
+                var data = $(this).serialize().split("&");
+                var dataObj = {
+                    "msgid": msgobj.uid,
+                    "attn" : attn
+                };
+                //black magic way to get all the form values for submission
+                for(var i = 0, len = data.length; i < len; i++)
+                {
+                    var x = data[i].split("=");
+                    dataObj[x[0]] = x[1];
+                }
+
+                //check if indeterminate is chosen
+                if(!dataObj.choice) 
+                {
+                    if(recordedResponses.choice) dataObj.choice = "";
+                    else delete dataObj["choice"];
+                }
+
+                //perform some black magic to submit
+                var jqxhr = $.ajax({
+                    url: "/cgi-bin/emb/choice.pl?view.pl?date??",
+                    method: "POST", 
+                    data: dataObj
+                }).done(function(res, textStatus, jqXHR){
+                    toast("Response Submitted!");
+                }).fail(function(jqXHR, textStatus, errorThrown) {
+                    err("Error Occured! (" + errorThrown + ")");
+                })
+                .always(function() {});
+
+                console.log(dataObj);
+                e.stopPropagation();
+                e.preventDefault();
+            });
             $("#msgloader").remove();
         }
         
     }).fail(function(jqXHR, textStatus, errorThrown) { 
         /*show error*/
         // TO DO !!!!!
-        alert("Error: " + errorThrown);
+        err("Error: " + errorThrown);
     }).always(function() {});
     
     retrieving = false;
@@ -1384,6 +1474,7 @@ function refreshMessages(page, manual, options)
 				else
 				{
 					console.log("No new messages");
+                    toast("No new messages!&nbsp;&nbsp;^_^", 2000);
 				}
 				$("#refresh").removeClass("spin faster");
 			}
@@ -1429,7 +1520,7 @@ function refreshMessages(page, manual, options)
 			   		{
 			   			//show a toast !!!!!
 			   			
-			   			//Materialize.toast(delta.length + ' New Messages.<br>Click <i class="material-icons">refresh</i> to refresh.', 3000, 'rounded');
+			   			toast(delta.length + ' New Messages.<br>Click <i class="material-icons">refresh</i> to refresh.', 3000);
 			   			//Materialize.toast("5 New Messages. Click&nbsp;<i class='material-icons'>refresh</i>&nbsp;to refresh.", 3000, "rounded unselectable grabbable notif");
 						//Materialize.toast('I am a toast!', 3000, 'rounded');
 						//$(".notif").forwardevents();
@@ -1732,6 +1823,18 @@ function sscroll(id)
     $('html,body').stop(true,false).animate({
         scrollTop: $(id).offset().top - 70
     }, 500);
+}
+
+function toast(msg, time)
+{
+    //alert(msg);
+    if(!time) time = 4000;
+    Materialize.toast(msg, time, 'toasted');
+}
+
+function err(errormsg)
+{
+    alert(errormsg);
 }
 
 //notifying codes

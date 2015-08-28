@@ -16,15 +16,14 @@ after reading also need to move the messages KIV? feels weird
 
 tooltip at refresh if got new messages
 
-
 mark messages put at top
 need response put nicely in a form
-put in date/viewer info, etc
+
+==in viewing box==
+put in date/viewer info, marking etc
 open in larger window
 
 reduce footer height to increase message height
-
-add post btn
 
 change GM_setvalue blah to localstorage
 
@@ -34,7 +33,11 @@ select, deselect all
 
 i forsee that anyone with a screen <= 1366*768 needs to run the thing with 90% zoom
 
-detect links and change
-EMB Help link nt working
+detect links/email and change
+add calendar entry detection
 
 try to get current message board
+
+===============DONE===================
+add post btn
+EMB Help link nt working
