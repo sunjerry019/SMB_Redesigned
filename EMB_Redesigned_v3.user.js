@@ -699,17 +699,32 @@ function startMain(viewpl)
    		console.log("Messages sorted");
    		
    		//add top bar
+
+        //dropdown
+        body.push('<ul id="extra" class="dropdown-content">');
+
+        body.push('<li><a id="archive" href="' + infos.topbar.archive + '" title="View Archived Messages"><i class="material-icons unselectable">archive</i> <span>Archives</span></a></li>');
+        body.push('<li><a id="utils" href="' + infos.topbar.util + '" title="Utility Functions"><i class="material-icons unselectable">settings</i> <span>Utilities</span></a></li>');
+        if(typeof(infos.topbar.hciwebmail) != "undefined") body.push('<li><a id="hciwebmail" href="' + infos.topbar.hciwebmail + '" title="HCI Webmail"><i class="material-icons unselectable">email</i> <span>HCI Webmail</span></a></li>');
+        body.push('<li><a id="logout" href="' + infos.topbar.logout + '" title="Logout and Exit EMBs"><i class="material-icons unselectable">exit_to_app</i> <span>Logout</span></a></li>');
+        body.push('</ul>');
+        //end dropdown
+        
+        //main navbar
    		body.push('<div class="navbar-fixed"><nav><div class="nav-wrapper'+ (colours.nav ? " " : "") + colours.nav +'">');
    		body.push('<a href="http://www.hci.edu.sg/" class="brand-logo unselectable" style="margin-left: 25px">Hwa Chong Institution</a>');
    		body.push('<ul class="right hide-on-med-and-down">');
 		body.push('<li><a class="pointer" id="search" title="Search"><i class="material-icons unselectable">search</i></a></li>');
 		body.push('<li><a class="pointer" id="refresh" title="Refresh"><i class="material-icons unselectable">refresh</i></a></li>');
-		body.push('<li><a id="archive" href="' + infos.topbar.archive + '" title="View Archived Messages"><i class="material-icons unselectable">archive</i></a></li>');
+        if(typeof(infos.topbar.post) != "undefined") body.push('<li><a id="post" href="' + infos.topbar.post + '" title="Post"><i class="material-icons unselectable">create</i></a></li>');
+
 		if(infos.topbar.exit) body.push('<li><a id="otherBoards" href="' + infos.topbar.exit + '" title="Exit to Other Boards"><i class="material-icons unselectable">toc</i></a></li>');
-		body.push('<li><a id="utils" href="' + infos.topbar.util + '" title="Utility Functions"><i class="material-icons unselectable">settings</i></a></li>');
-		body.push('<li><a id="logout" href="' + infos.topbar.logout + '" title="Logout and Exit EMBs"><i class="material-icons unselectable">exit_to_app</i></a></li>');
+
+        body.push('<li class="pointer"><a class="dropdown-button" data-activates="extra" title="More"><i class="material-icons right">more_vert</i></a></li>');
+
    		body.push('</ul></div></nav></div>');
    		console.log("Topbar OK");
+        //end topbar
    		
    		//add refresh, util, logout
    		
@@ -793,6 +808,14 @@ function startMain(viewpl)
 	   	//extracss
 	   	var extraCSS = [];
 	   	extraCSS.push('<style>');
+        //header
+        extraCSS.push(".nav-wrapper .dropdown-button i {margin-left: 0px;}");
+        //extraCSS.push(".nav-wrapper .dropdown-button span {font-size: 1.1em;}");
+        //extraCSS.push(".nav-wrapper ul.dropdown-content {margin-left: -20px;}");
+        extraCSS.push(".nav-wrapper ul.dropdown-content li {text-align: center;}");
+        extraCSS.push(".nav-wrapper ul.dropdown-content li span {font-size: 0.7em;}");
+
+        //content general
 	   	extraCSS.push('p.center{text-align:center;} ');
 	   	extraCSS.push('.mark{opacity: 0.5; -webkit-transition: all 600ms ease-in-out; transition: all 600ms ease-in-out; } '); //cubic-bezier(0.165, 0.84, 0.44, 1);
 	   	extraCSS.push('.mark.activated {opacity: 1; } ');
@@ -868,6 +891,9 @@ function startMain(viewpl)
 		$("body").removeAttr("oncontextmenu");
 		$("head").append(extraCSS.join(""));
 		
+        //initialize javascripts
+        $(".dropdown-button").dropdown();
+
 		//apply the styles
 		/*$(".main").css({
 			"margin": "20px 50px"
@@ -1619,108 +1645,70 @@ function getTopbar(options)
 		var response = $('<html />').html(data);
 		//credit https://stackoverflow.com/questions/405409/use-jquery-selectors-on-ajax-loaded-html#7831229
 		var x = response.find("th").length;
-		if(x == 10)
-		{
-			console.log("There are posting rights");
-			response.find("th").each(function(idx)
-			{
-				switch(idx)
-				{
-					case 0:
-						retu.view = $(this).children("a").attr("href");
-						break;
-					case 1:
-						retu.post = $(this).children("a").attr("href");
-						break;
-					case 2:
-						retu.archive = $(this).children("a").attr("href");
-						break;
-					case 3:
-						retu.util = $(this).children("a").attr("href");
-						break;
-					case 4:
-						if($(this).children("a").length) retu.exit = $(this).children("a").attr("href");
-						else retu.exit = false;
-						break;
-					case 5:
-						retu.logout = $(this).children("a").attr("href");
-						break;
-					case 6:
-						retu.help = $(this).children("a").attr("href");
-						break;
-					case 7:
-						//here lies the emb name and id etc that isn't diplayed anyway if not passed a get parameter
-						break;
-					case 8:
-						var rawString = $(this).children("font[size=-1]").text().split(": ")[1].split(" ");
-						var dateString = rawString[0].split("/");
-						var timeString = rawString[1].split(":");
-						retu.lastlogin = {
-							"day": parseInt(dateString[0]),
-							"month": parseInt(dateString[1]),
-							"year": parseInt("20" + dateString[2]),
-							"hour": parseInt(timeString[0]),
-							"minutes" : parseInt(timeString[1])
-						}
-						break;
-					case 9:
-						retu.loginCount = parseInt($(this).text().split("#")[1]);
-						break;
-					default:
-						break;
-				}
-				console.log(idx, "OK");
-			});
-		}
-		else
-		{
-			response.find("th").each(function(idx)
-			{
-				switch(idx)
-				{
-					case 0:
-						retu.view = $(this).children("a").attr("href");
-						break;
-					case 1:
-						retu.archive = $(this).children("a").attr("href");
-						break;
-					case 2:
-						retu.util = $(this).children("a").attr("href");
-						break;
-					case 3:
-						if($(this).children("a").length) retu.exit = $(this).children("a").attr("href");
-						else retu.exit = false;
-						break;
-					case 4:
-						retu.logout = $(this).children("a").attr("href");
-						break;
-					case 5:
-						retu.help = $(this).children("a").attr("href");
-						break;
-					case 6:
-						//here lies the emb name and id etc that isn't diplayed anyway if not passed a get parameter
-						break;
-					case 7:
-						var rawString = $(this).children("font[size=-1]").text().split(": ")[1].split(" ");
-						var dateString = rawString[0].split("/");
-						var timeString = rawString[1].split(":");
-						retu.lastlogin = {
-							"day": parseInt(dateString[0]),
-							"month": parseInt(dateString[1]),
-							"year": parseInt("20" + dateString[2]),
-							"hour": parseInt(timeString[0]),
-							"minutes" : parseInt(timeString[1])
-						}
-						break;
-					case 8:
-						retu.loginCount = parseInt($(this).text().split("#")[1]);
-						break;
-					default:
-						break;
-				}
-				console.log(idx, "OK");
-			});
-		}
+        var i = 0; //custom iterator
+		response.find("th").each(function(idx)
+        {
+            switch(i)
+            {
+                case 0:
+                    retu.view = $(this).children("a").attr("href");
+                    i++;
+                    break;
+                case 1:
+                    if(/post/gi.test($.trim($(this).children("a").text()))) retu.post = $(this).children("a").attr("href");
+                    else 
+                    {
+                        retu.archive = $(this).children("a").attr("href");
+                        i++;
+                    }
+                    break;
+                case 2:
+                    retu.util = $(this).children("a").attr("href");
+                    i++
+                    break;
+                case 3:
+                    if($(this).children("a").length) retu.exit = $(this).children("a").attr("href");
+                    else retu.exit = false;
+                    i++
+                    break;
+                case 4:
+                    retu.logout = $(this).children("a").attr("href");
+                    i++
+                    break;
+                case 5:
+                    if(/Webmail/gi.test($.trim($(this).children("a").text()))) retu.hciwebmail = $(this).children("a").attr("href");
+                    else 
+                    {
+                        retu.help = $(this).children("a").attr("href");
+                        i++;
+                    }
+                    break;
+                case 6:
+                    //here lies the emb name and id etc that isn't diplayed anyway if not passed a get parameter
+                    i++;
+                    break;
+                case 7:
+                    var rawString = $(this).children("font[size=-1]").text().split(": ")[1].split(" ");
+                    var dateString = rawString[0].split("/");
+                    var timeString = rawString[1].split(":");
+                    retu.lastlogin = {
+                        "day": parseInt(dateString[0]),
+                        "month": parseInt(dateString[1]),
+                        "year": parseInt("20" + dateString[2]),
+                        "hour": parseInt(timeString[0]),
+                        "minutes" : parseInt(timeString[1])
+                    }
+                    i++;
+                    break;
+                case 8:
+                    retu.loginCount = parseInt($(this).text().split("#")[1]);
+                    i++;
+                    break;
+                default:
+                    break;
+            }
+            console.log(idx, "OK");
+        });
 		
 		if(opt.callback) opt.callback(retu);
 		

@@ -36,3 +36,5 @@ i forsee that anyone with a screen <= 1366*768 needs to run the thing with 90% z
 
 detect links and change
 EMB Help link nt working
+
+try to get current message board
