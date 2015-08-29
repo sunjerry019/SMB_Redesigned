@@ -38,6 +38,8 @@ add calendar entry detection
 
 try to get current message board
 
+height of message a problem ----> dynamically adjust height?
+
 ===============DONE===================
 add post btn
 EMB Help link nt working

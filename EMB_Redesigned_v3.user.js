@@ -238,7 +238,10 @@ function startLogin()
     });
     
     //show body
-    $('body').fadeIn(1000);
+    $('body').fadeIn(1000, function(){
+        //$("#password").focus();
+        $("#userid").focus();
+    });
 }
 
 function startMenu()
