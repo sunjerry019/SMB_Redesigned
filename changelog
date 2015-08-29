@@ -1,4 +1,4 @@
-29/08/2015
+===29/08/2015===
 fixed marking bug (it was due to sending value of submit button)
 added responses
 added indeterminate radio button
@@ -6,3 +6,5 @@ fixed toasting
 fixed height of .msgcontent (added -35px)
 fixed unselectable issues (bzg. more_vert, no new messages)
 fixed EMB Help unclickable (it was due to posted messagess overlaying on top of it, so there were no pointer events)
+added chrome support (with run_at document start)
+made the cursor focus on userid on login screen
