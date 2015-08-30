@@ -755,7 +755,7 @@ function startMain(viewpl)
 	   				if(!(sortedMessages.imptUnread.length + sortedMessages.impt.length))
 	   				{
 	   					console.log("No new messages");
-	   					body.push('<li class="collection-item impt nonewmessages unselectable"><p class="center">&mdash; No new messages &mdash;</p></li>');
+	   					body.push('<li class="collection-item impt nonewmessages unselectable defaultCursor"><p class="center">&mdash; No new messages &mdash;</p></li>');
 	   					console.log("pushed");
 	   				}
 	   				body.push('<li class="collection-header"><h5 class="unselectable"><i class="material-icons">chat</i> Normal Messages</h5></li>');
@@ -776,7 +776,7 @@ function startMain(viewpl)
 	   				console.log("Type is normal. checking whether there were no messages");
 	   				if(!(sortedMessages.normalUnread.length + sortedMessages.normal.length))
 	   				{
-	   					body.push('<li class="collection-item normal nonewmessages unselectable"><p class="center">&mdash; No new messages &mdash;</p></li>');
+	   					body.push('<li class="collection-item normal nonewmessages unselectable defaultCursor"><p class="center">&mdash; No new messages &mdash;</p></li>');
 	   				}
    				}
 				body.push("</div>");
@@ -1832,7 +1832,7 @@ function toast(msg, time)
 {
     //alert(msg);
     if(!time) time = 4000;
-    Materialize.toast(msg, time, 'toasted');
+    Materialize.toast(msg, time, 'toasted grabbable unselectable');
 }
 
 function err(errormsg)

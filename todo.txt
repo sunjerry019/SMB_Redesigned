@@ -22,6 +22,7 @@ need response put nicely in a form
 ==in viewing box==
 put in date/viewer info, marking etc
 open in larger window
+close message
 
 reduce footer height to increase message height
 
@@ -31,8 +32,6 @@ http://www.planwallpaper.com/static/images/colorful-triangles-background_yB0qTG6
 
 select, deselect all
 
-i forsee that anyone with a screen <= 1366*768 needs to run the thing with 90% zoom
-
 detect links/email and change
 add calendar entry detection
 
@@ -40,6 +39,10 @@ try to get current message board
 
 height of message a problem ----> dynamically adjust height?
 
+refresh sorts messages?
+show bracket how many unread messages
+
 ===============DONE===================
 add post btn
 EMB Help link nt working
+i forsee that anyone with a screen <= 1366*768 needs to run the thing with 90% zoom

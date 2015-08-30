@@ -1,4 +1,9 @@
-===29/08/2015===
+
+===2015/08/30===
+added grabbable and unselectable classes to toasts**
+added unselectable to "no new messages"**
+
+===2015/08/29===
 fixed marking bug (it was due to sending value of submit button)
 added responses
 added indeterminate radio button
@@ -8,3 +13,9 @@ fixed unselectable issues (bzg. more_vert, no new messages)
 fixed EMB Help unclickable (it was due to posted messagess overlaying on top of it, so there were no pointer events)
 added chrome support (with run_at document start)
 made the cursor focus on userid on login screen
+
+===LEGEND===
+*	Did not recompile chrome extension
+**	Did not recompile min.js and chrome extension
+
+[all changes with * and ** will be propogated upon next compile]
