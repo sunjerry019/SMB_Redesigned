@@ -42,6 +42,9 @@ height of message a problem ----> dynamically adjust height?
 refresh sorts messages?
 show bracket how many unread messages
 
+test the new message notify thing --- flow of text seems to have problem
+    --perhaps can purposefully remove some messages during the first load
+
 ===============DONE===================
 add post btn
 EMB Help link nt working
