@@ -840,7 +840,9 @@ function startMain(viewpl)
 	   	extraCSS.push(".collection .collection-item {padding-right: 50px;} ");
 	   	extraCSS.push(".collection-header .material-icons { margin-right: 10px; } ");
 	   	extraCSS.push(".collection-header {cursor: default;} ");
+        extraCSS.push(".collection-item.avatar p { color: #777; }");
 	   	extraCSS.push(".collection #imptUnread .collection-item:last-child, .collection #normalUnread .collection-item:last-child{border-bottom: 1px solid #E0E0E0;}");
+        extraCSS.push(".avt {display: inline-block; text-align: center; font-size: 22px; line-height: 42px; vertical-align: middle;}");
 	   	extraCSS.push(".avt.selected{background-color: #999999 !important; transform: rotatey(180deg);} ");
 	   	extraCSS.push(".collection-item.avatar.selected{background-color: #ddd !important;} ");
 	   	extraCSS.push(".avt{transition: all 0.2s linear;} ");
@@ -902,20 +904,6 @@ function startMain(viewpl)
 		/*$(".main").css({
 			"margin": "20px 50px"
 		});*/
-		
-		$(".avt").css({
-			/*"height": "50px",
-			"width": "50px",*/
-			"display": "inline-block",
-			"text-align": "center",
-			"font-size": "22px",
-			"line-height": "42px",
-			"vertical-align": "middle"
-		});
-		
-		$(".collection-item.avatar p").css({
-			"color": "#777"
-		});
 	
 		//add eventHandlers
 		$("#refresh").click(function(e) {
@@ -926,122 +914,7 @@ function startMain(viewpl)
 			}
 		});
 		
-		$(".avt").click(function(e) {
-			//some shit happens here for selecting
-			if($(this).hasClass("selected"))
-			{
-				var uid = this.dataset.msgid;
-				selectedMessages = selectedMessages.filter(function( obj ) {
-					return obj.uid != uid;
-				});
-				//credit https://stackoverflow.com/questions/15287865/remove-array-element-based-on-object-property#15287938
-				$(this).removeClass("selected");
-				$(this).closest("li").removeClass("selected");
-				$(this).html(this.dataset.letter);
-			}
-			else
-			{
-				var obj = $.parseJSON(he.decode($(this).closest("li")[0].dataset.obj));
-				selectedMessages.push(obj);
-				$(this).addClass("selected");
-				$(this).closest("li").addClass("selected");
-				$(this).html('<i style="line-height: 42px; transform: rotatey(180deg)" class="material-icons">check</i>');
-			}
-			//console.log("selected", selectedMessages);
-			e.stopPropagation();
-		});
-		
-		$(".collection-item").click(function(e) {
-		
-			//check not selected
-			if(!$(this).hasClass("selected"))
-			{
-				var msgobj = $.parseJSON(he.decode(this.dataset.obj));
-				if(!currentMessage)
-				{
-					currentMessage = msgobj;				
-					$(".msgs").removeClass("l12").addClass("l4");
-					$(".cnt").removeClass("hidden");
-                    fetchMessage(currentMessage);
-                    $(".cnt").on('transitionend webkitTransitionEnd oTransitionEnd otransitionend MSTransitionEnd', function() {
-                        sscroll("#msg_" + currentMessage.uid);
-                    });
-				}
-				else
-				{
-					if(currentMessage.uid == msgobj.uid)
-					{
-						$(".msgs").removeClass("l4").addClass("l12");
-						$(".cnt").addClass("hidden");
-						currentMessage = false;
-					}
-					else
-					{
-						//change message
-						//===================================ISSUES HERE========================================
-						currentMessage = msgobj;
-						fetchMessage(currentMessage);
-                        sscroll("#msg_" + currentMessage.uid);
-					}
-				}
-			}
-			else
-			{
-				console.log("Messaage is selected");
-			}
-		});
-		
-		
-		$(".mark").click(function(e){
-			//$(this).html('<div class="preloader-wrapper active" style="height: ' + $(this).height() + '"><div class="spinner-layer spinner-blue-only"><div class="circle-clipper left"><div class="circle"></div></div><div class="gap-patch"><div class="circle"></div></div><div class="circle-clipper right"><div class="circle"></div></div></div></div>');
-			var ele = this;
-			var currentlyMarked = $(ele).hasClass("activated");
-			if($(ele).hasClass("asyncError"))
-			{
-				$(ele).removeClass("asyncError");
-			}
-			$(ele).html("filter_tilt_shift");
-			$(ele).addClass("spin");
-		
-			//do ajax to mark message
-			var jqxhr = $.ajax({
-				url: "/cgi-bin/emb/choice.pl?view.pl?date??",
-				method: "POST", 
-				data: { 
-					'msgid': ele.dataset.msgid,
-					//'choice': "Back/Submit",
-					'attn': ( currentlyMarked ? "B" : "A" ) /*A is yes, B is no*/
-				}
-			}).done(function(res, textStatus, jqXHR){
-				//console.log(textStatus);
-				$(ele).removeClass("spin");
-		
-				if(currentlyMarked) 
-				{
-					$(ele).html("star_border");
-					$(ele).removeClass("activated");
-				}
-				else
-				{
-					$(ele).html("star");
-					$(ele).addClass("activated");
-				}
-
-                var obj = $.parseJSON(he.decode($("#msg_" + ele.dataset.msgid).dataset.obj));
-                obj.marked = !obj.marked;
-                $("#msg_" + ele.dataset.msgid).dataset.obj = he.encode(JSON.stringify(msgobj), {'useNamedReferences': true});
-
-			}).fail(function(jqXHR, textStatus, errorThrown) {
-				//console.log(textStatus);
-				$(ele).removeClass("spin");
-				
-				$(ele).html("warning");
-				$(ele).addClass("asyncError");
-			})
-			.always(function() {});
-			
-			e.stopPropagation();
-		});
+		initializeMessages();
 		
 		$("#search").click(function(e){
 			//add search here !!!!!
@@ -1060,6 +933,130 @@ function startMain(viewpl)
 		lastUpdated = infos.timestamp;
 		$("#loading").fadeOut(500);
 	});
+}
+
+function initializeMessages()
+{
+    $(".avt").off("click");
+    $(".collection-item").off("click");
+    $(".mark").off("click");
+
+    $(".avt").click(function(e) {
+        //some shit happens here for selecting
+        if($(this).hasClass("selected"))
+        {
+            var uid = this.dataset.msgid;
+            selectedMessages = selectedMessages.filter(function( obj ) {
+                return obj.uid != uid;
+            });
+            //credit https://stackoverflow.com/questions/15287865/remove-array-element-based-on-object-property#15287938
+            $(this).removeClass("selected");
+            $(this).closest("li").removeClass("selected");
+            $(this).html(this.dataset.letter);
+        }
+        else
+        {
+            var obj = $.parseJSON(he.decode($(this).closest("li")[0].dataset.obj));
+            selectedMessages.push(obj);
+            $(this).addClass("selected");
+            $(this).closest("li").addClass("selected");
+            $(this).html('<i style="line-height: 42px; transform: rotatey(180deg)" class="material-icons">check</i>');
+        }
+        //console.log("selected", selectedMessages);
+        e.stopPropagation();
+    });
+    
+    $(".collection-item").click(function(e) {
+    
+        //check not selected
+        if(!$(this).hasClass("selected"))
+        {
+            var msgobj = $.parseJSON(he.decode(this.dataset.obj));
+            if(!currentMessage)
+            {
+                currentMessage = msgobj;                
+                $(".msgs").removeClass("l12").addClass("l4");
+                $(".cnt").removeClass("hidden");
+                fetchMessage(currentMessage);
+                $(".cnt").on('transitionend webkitTransitionEnd oTransitionEnd otransitionend MSTransitionEnd', function() {
+                    sscroll("#msg_" + currentMessage.uid);
+                });
+            }
+            else
+            {
+                if(currentMessage.uid == msgobj.uid)
+                {
+                    $(".msgs").removeClass("l4").addClass("l12");
+                    $(".cnt").addClass("hidden");
+                    currentMessage = false;
+                }
+                else
+                {
+                    //change message
+                    //===================================ISSUES HERE========================================
+                    currentMessage = msgobj;
+                    fetchMessage(currentMessage);
+                    sscroll("#msg_" + currentMessage.uid);
+                }
+            }
+        }
+        else
+        {
+            console.log("Messaage is selected");
+        }
+    });
+    
+    
+    $(".mark").click(function(e){
+        //$(this).html('<div class="preloader-wrapper active" style="height: ' + $(this).height() + '"><div class="spinner-layer spinner-blue-only"><div class="circle-clipper left"><div class="circle"></div></div><div class="gap-patch"><div class="circle"></div></div><div class="circle-clipper right"><div class="circle"></div></div></div></div>');
+        var ele = this;
+        var currentlyMarked = $(ele).hasClass("activated");
+        if($(ele).hasClass("asyncError"))
+        {
+            $(ele).removeClass("asyncError");
+        }
+        $(ele).html("filter_tilt_shift");
+        $(ele).addClass("spin");
+    
+        //do ajax to mark message
+        var jqxhr = $.ajax({
+            url: "/cgi-bin/emb/choice.pl?view.pl?date??",
+            method: "POST", 
+            data: { 
+                'msgid': ele.dataset.msgid,
+                //'choice': "Back/Submit",
+                'attn': ( currentlyMarked ? "B" : "A" ) /*A is yes, B is no*/
+            }
+        }).done(function(res, textStatus, jqXHR){
+            //console.log(textStatus);
+            $(ele).removeClass("spin");
+    
+            if(currentlyMarked) 
+            {
+                $(ele).html("star_border");
+                $(ele).removeClass("activated");
+            }
+            else
+            {
+                $(ele).html("star");
+                $(ele).addClass("activated");
+            }
+
+            var obj = $.parseJSON(he.decode($("#msg_" + ele.dataset.msgid).dataset.obj));
+            obj.marked = !obj.marked;
+            $("#msg_" + ele.dataset.msgid).dataset.obj = he.encode(JSON.stringify(msgobj), {'useNamedReferences': true});
+
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+            //console.log(textStatus);
+            $(ele).removeClass("spin");
+            
+            $(ele).html("warning");
+            $(ele).addClass("asyncError");
+        })
+        .always(function() {});
+        
+        e.stopPropagation();
+    });
 }
 
 function init()
@@ -1160,11 +1157,27 @@ function init()
 
 function addMaterial()
 {
-	var materialCSS = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/css/materialize.min.css"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><style>@media only screen and (max-width:1366px) { html{zoom: 90%;} } .unselectable{-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;} .pointer{cursor: pointer;} .defaultCursor{cursor: default;} .grabbable:hover{cursor: grab;} .grabbable:active{cursor: grabbing;} .noPointerEvents {pointer-events: none;}</style>';
+	var materialCSS = [];
+
+    materialCSS.push('<link type="image/x-icon" href="http://www.hci.edu.sg/favicon.ico" rel="icon">');
+    materialCSS.push('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/css/materialize.min.css">');
+    materialCSS.push('<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">');
+
+    materialCSS.push('<style>');
+
+    materialCSS.push('@media only screen and (max-width:1366px) { html{zoom: 90%;} } ');
+    materialCSS.push('.unselectable{-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;} ');
+    materialCSS.push('.pointer{cursor: pointer;} ');
+    materialCSS.push('.defaultCursor{cursor: default;} ');
+    materialCSS.push('.grabbable:hover{cursor: grab;} ');
+    materialCSS.push('.grabbable:active{cursor: grabbing;} ');
+    materialCSS.push('.noPointerEvents {pointer-events: none;}');
+
+    materialCSS.push('</style>');
 
     //var toastCSS = '<style>@media only screen and (min-width : 601px) and (max-width : 1260px) {.toast {width: 100%;border-radius: 0;} }@media only screen and (min-width : 1261px) {.toast {width: 100%;border-radius: 0; } }@media only screen and (min-width : 601px) and (max-width : 1260px) {#toast-container {min-width: 100%;bottom: 0%;top: 90%;right: 0%;left: 0%;} }@media only screen and (min-width : 1261px) {#toast-container {min-width: 100%;bottom: 0%;top: 90%;right: 0%;left: 0%; } } .toasted {margin: 0px 20px; width:calc(100% - 40px); position: fixed;}</style>';
 
-	$("head").append(materialCSS); //.append(toastCSS);
+	$("head").append(materialCSS.join("")); //.append(toastCSS);
 }
 
 //Other functions
@@ -1464,6 +1477,8 @@ function refreshMessages(page, manual, options)
 							$("#" + type).prepend(toBeAdded.join(""));
 						}
 				   	}
+                    initializeMessages();
+
 				   	if(($(".queuing.msg_imptUnread").length + $(".queuing.msg_impt").length) && $(".impt.nonewmessages").length)
 				   	{
 				   		$(".impt.nonewmessages").css("height", "0px").remove();
@@ -1502,6 +1517,8 @@ function refreshMessages(page, manual, options)
 						$("#" + type).prepend(toBeAdded.join(""));
 					}
 			   	}
+
+                initializeMessages();
 			   	
 			   	if(delta.length > 0)
 			   	{

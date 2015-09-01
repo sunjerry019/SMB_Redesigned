@@ -44,10 +44,14 @@ show bracket how many unread messages
 
 test the new message notify thing --- flow of text seems to have problem
     --perhaps can purposefully remove some messages during the first load
-Realized that the problem might be due to inline style instead of global style. Move then see what are the effects.
 Check whether the page itself shows notification. If there are new notifications, it should notify through the native notification system.
+
+catch errors if refresh returns error
+
+I realized that chrome doesnt animate the refresh when it is clicked
 
 ===============DONE===================
 add post btn
 EMB Help link nt working
 i forsee that anyone with a screen <= 1366*768 needs to run the thing with 90% zoom
+Realized that the problem might be due to inline style instead of global style. Move then see what are the effects.

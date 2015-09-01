@@ -1,3 +1,9 @@
+===2015/09/01===
+moved eventlistener additions to initializeMessages()
+moved styles for ".avt", ".collection-item.avatar p" to extraCSS
+change the var materialCSS from string to array for better legibility
+added hci favicon
+compiled min js and chrome ext (v3.1.1)
 
 ===2015/08/30===
 added grabbable and unselectable classes to toasts**
