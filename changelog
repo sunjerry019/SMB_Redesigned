@@ -1,3 +1,8 @@
+===2015/09/05===
+Tried to fix the height issue, but was unsuccessful. The height needs to be $(".cnt").height()-$(".msgheader").height() [Reverted to previous code] **
+added special case fallback for attachments if the "attachment" header is wrapped in another font tag **
+
+
 ===2015/09/01===
 moved eventlistener additions to initializeMessages()
 moved styles for ".avt", ".collection-item.avatar p" to extraCSS

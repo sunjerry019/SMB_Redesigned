@@ -714,18 +714,21 @@ function startMain(viewpl)
         //end dropdown
         
         //main navbar
-   		body.push('<div class="navbar-fixed"><nav><div class="nav-wrapper'+ (colours.nav ? " " : "") + colours.nav +'">');
+   		body.push('<div class="navbar-fixed"><nav><div class="nav-wrapper hauptnav'+ (colours.nav ? " " : "") + colours.nav +'">');
    		body.push('<a href="http://www.hci.edu.sg/" class="brand-logo unselectable" style="margin-left: 25px">Hwa Chong Institution</a>');
    		body.push('<ul class="right hide-on-med-and-down">');
 		body.push('<li><a class="pointer" id="search" title="Search"><i class="material-icons unselectable">search</i></a></li>');
 		body.push('<li><a class="pointer" id="refresh" title="Refresh"><i class="material-icons unselectable">refresh</i></a></li>');
+
         if(typeof(infos.topbar.post) != "undefined") body.push('<li><a id="post" href="' + infos.topbar.post + '" title="Post"><i class="material-icons unselectable">create</i></a></li>');
 
 		if(infos.topbar.exit) body.push('<li><a id="otherBoards" href="' + infos.topbar.exit + '" title="Exit to Other Boards"><i class="material-icons unselectable">toc</i></a></li>');
 
         body.push('<li class="pointer unselectable"><a class="dropdown-button" data-activates="extra" title="More"><i class="material-icons right">more_vert</i></a></li>');
 
-   		body.push('</ul></div></nav></div>');
+   		body.push('</ul></div>'); //close .right hide-on-med-and-down and .nav-wrapper
+        body.push('</nav></div>'); //close .navbar-fixed
+
    		console.log("Topbar OK");
         //end topbar
    		
@@ -863,6 +866,7 @@ function startMain(viewpl)
 	   	extraCSS.push(".cnt .avt {height: 42px; display: inline-block; width: 42px; text-align: center; line-height: 42px; font-size: 22px; position: absolute; left: 20px; top: 20px;}");
         extraCSS.push(".cnt .cntcenter {margin-top: 0px;}");
 	   	extraCSS.push(".msgcontent {overflow-y: auto; height: calc(100% - " + settings.footer.height + " - " + settings.footer.padding + " - " + settings.footer.padding + " - " + settings.footer.margin + " - 45px - 35px) !important;}"); //originally 5px
+        //extraCSS.push(".msgcontent {overflow-y: auto;}"); 
         extraCSS.push(".msgcontent .cntwrapper {height: 100%; padding: 20px 20px 0px 20px;}");
         extraCSS.push(".msgcontent .cntwrapper a:hover {text-decoration: underline;}");
         extraCSS.push(".msgcontent .cntwrapper .attachments a:hover {text-decoration: none;}");
@@ -917,6 +921,7 @@ function startMain(viewpl)
 		initializeMessages();
 		
 		$("#search").click(function(e){
+
 			//add search here !!!!!
 			//ajax search results (do all)
 			//if not in result apply class queuing
@@ -1228,19 +1233,41 @@ function fetchMessage(msgobj)
                 };
             }
             response.find("form").remove();
-            response.find("font[color=red]:contains('Attachments')").nextAll("a").each(function(idx){
-                var attachobj = {};
-                attachobj.href = $(this).attr("href");
-                var x = $.trim($(this).text()).split(" - ");
-                attachobj.index = parseInt(x.shift().split(" ")[1]);
-                attachobj.name = x.join(" - ");
-                if(!($.trim(attachobj.name).length)) attachobj.name = "<i>Attach "+ attachobj.index +"</i>";
-                attachobj.type = attachobj.href.split(".").slice(-1).pop();
-                attachobj.size = $(this).next("font").text().replace(/(\(|\))/gi, "");
-                attachments.push(attachobj);
-            });
-            response.find("font[color=red]:contains('Attachments')").nextAll().remove();
-            response.find("font[color=red]:contains('Attachments')").remove();
+
+            var attachmentnode = response.find("font[color=red]:contains('Attachments')");
+            if(attachmentnode.nextAll("a").length)
+            {
+                attachmentnode.nextAll("a").each(function(idx){
+                    var attachobj = {};
+                    attachobj.href = $(this).attr("href");
+                    var x = $.trim($(this).text()).split(" - ");
+                    attachobj.index = parseInt(x.shift().split(" ")[1]);
+                    attachobj.name = x.join(" - ");
+                    if(!($.trim(attachobj.name).length)) attachobj.name = "<i>Attach "+ attachobj.index +"</i>";
+                    attachobj.type = attachobj.href.split(".").slice(-1).pop();
+                    attachobj.size = $(this).next("font").text().replace(/(\(|\))/gi, "");
+                    attachments.push(attachobj);
+                });
+                attachmentnode.nextAll().remove();
+                attachmentnode.remove();
+            }
+            else if(attachmentnode.parent().nextAll("a").length) //there's probably a wrapper wrapping the Attachments
+            {
+                attachmentnode.parent().nextAll("a").each(function(idx){
+                    var attachobj = {};
+                    attachobj.href = $(this).attr("href");
+                    var x = $.trim($(this).text()).split(" - ");
+                    attachobj.index = parseInt(x.shift().split(" ")[1]);
+                    attachobj.name = x.join(" - ");
+                    if(!($.trim(attachobj.name).length)) attachobj.name = "<i>Attach "+ attachobj.index +"</i>";
+                    attachobj.type = attachobj.href.split(".").slice(-1).pop();
+                    attachobj.size = $(this).next("font").text().replace(/(\(|\))/gi, "");
+                    attachments.push(attachobj);
+                });
+                attachmentnode.parent().nextAll().remove();
+                attachmentnode.parent().remove();
+            }
+            
             while($.trim(response.find("div *:not(img, p br):last").html()) == "")
             {
                 response.find("div *:not(img, p br):last").remove();
