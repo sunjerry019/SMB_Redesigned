@@ -50,6 +50,8 @@ catch errors if refresh returns error
 
 I realized that chrome doesnt animate the refresh when it is clicked
 
+Force default font as Roboto for consistency
+
 ===============DONE===================
 add post btn
 EMB Help link nt working
