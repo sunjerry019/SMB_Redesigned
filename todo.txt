@@ -51,6 +51,7 @@ catch errors if refresh returns error
 I realized that chrome doesnt animate the refresh when it is clicked
 
 Force default font as Roboto for consistency
+easter egg: if click hci logo 5 times go to rick roll
 
 ===============DONE===================
 add post btn
