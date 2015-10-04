@@ -78,14 +78,14 @@ function objectExtend(objTarget, obj)
             }
         }
     }
-    
+
     return $.extend(objTarget, obj);
 }
 
 function grabData(type)
 {
 	var ret = {};
-	
+
 	if(type == "login")
 	{
 		ret.action = $("form[name='theForm']").attr("action");
@@ -98,18 +98,18 @@ function grabData(type)
 	else if(type == "menu")
 	{
 		ret.admin = ($("a[href='menu_admin.pl']").length > 0);
-		
+
 		ret.toplinks = {};
 		$("a:not(table a)").each(function(ele)
 		{
 			ret.toplinks[$.trim($(this).text().toLowerCase())] = $(this).attr("href");
 		});
-		
+
 		ret.boards = {};
 		$("table a").each(function(ele)
 		{
 			var block = $(this).closest("tr").children("td[align='center']");
-			
+
 			ret.boards[$.trim($(this).text())] = {
 				"href": $(this).attr("href"),
 				"newc": $.trim($(block[0]).text()),
@@ -158,7 +158,7 @@ function grabData(type)
 			ret.topbar = getTopbar();
 			console.log("topbar OK");
 		}
-		else 
+		else
 		{
 			//assume error
 			ret.topbar = {
@@ -170,7 +170,7 @@ function grabData(type)
 			}
 		}
 	}
-	
+
 	return ret;
 }
 
@@ -178,24 +178,24 @@ function grabData(type)
 function startLogin()
 {
     currPage = 'login';
-    
+
     //set localstoragelink
     localStorage.link = window.location.pathname;
-    
+
     //set title
     document.title = "Electronic Messaging Board";
-    
+
     //style the body
     $("body").css({
     	"background": colours.background,
     	"display": "none"
     });
-    
+
     //process info
-    var infos = grabData(currPage);   
-    
+    var infos = grabData(currPage);
+
     var body = [];
-    
+
     body.push('<div class="card main"><div class="row"><form class="col s12" action="' + infos.action + '" method="POST">');
     //hcilogo
     body.push('<div class="row"><div class="center col s12"><img src="/smb/hci.png" style="height:50px;"></div></div>');
@@ -205,13 +205,13 @@ function startLogin()
     body.push('<div class="row"><div class="input-field col s12"><i class="material-icons prefix unselectable">vpn_key</i><input id="password" type="password" class="validate" maxlength="16" name="password" required><label for="password">Password</label></div></div>');
     //submit button + changepw
     body.push('<div class="row"><div class="col s12"><button class="btn waves-effect waves-light subbtn" type="submit" name="' + infos.submitName[0] + '"><i class="material-icons">send</i></button><div id="changepw"><button type="submit" class="waves-effect waves-teal btn-flat" name="' + infos.submitName[infos.submitName.length - 1] + '">Change Password</button></div></div></div>');
-    
+
     body.push("</div></div></div>");
-    
+
     //put in the html
     $("body").html(body.join(""));
     $("body").removeAttr("bgcolor");
-    
+
     //apply the styles
     $(".main").css({
     	"position": "absolute",
@@ -224,19 +224,19 @@ function startLogin()
 		"padding-top": "20px",
 		"margin": "auto"
     });
-    
+
     $(".subbtn").css({
     	"float": "right"
     });
-    
+
     $("#changepw button").css({
     	"float": "right"
     });
-    
+
     $(".row").css({
     	"margin-bottom": "5px"
     });
-    
+
     //show body
     $('body').fadeIn(1000, function(){
         //$("#password").focus();
@@ -247,21 +247,21 @@ function startLogin()
 function startMenu()
 {
     currPage = 'menu';
-    
+
     //set title
     document.title = "SMB Menu";
-    
+
     //style the body
     $("body").css({
     	"background": colours.background,
     	"display": "none"
     });
-    
+
     //process info
    	var infos = grabData(currPage);
-   	
+
    	var body = [];
-   	
+
    	body.push('<div class="parent"><div class="card main">');
    	//header
    	body.push('<div class="row"><h4 class="left" style="margin-left: 20px">SMB Menu</h4>');
@@ -271,13 +271,13 @@ function startMenu()
    	{
    		admIcons = '<a class="material-icons waves-effect waves-teal btn-flat" href="menu_admin.pl" title="Admin">verified_user</a>';
    	}
-   	
+
    	body.push('<div class="right barIcons">' + admIcons + '<a class="material-icons waves-effect waves-teal btn-flat" href="' + infos.toplinks.utility +'" title="Utility Functions">settings</a><a class="material-icons waves-effect waves-teal btn-flat" href="' + infos.toplinks.logout +'" title="Logout and Exit EMBs">exit_to_app</a></div>');
-   	
+
    	body.push('</div>'); //close .row
    	//main collection
    	body.push('<div class="row"><div class="collection">');
-   	
+
    	for(var board in infos.boards)
    	{
    		if(infos.boards.hasOwnProperty(board))
@@ -296,16 +296,16 @@ function startMenu()
    			{
    				badge = '<span class="badge">' + parseInt(obj.all) + '</span>';
    			}
-   			
+
    			body.push('<a href="'+ obj.href +'" class="collection-item">' + board + badge + '</a>');
 		}
    	}
-   	
+
    	body.push('</div></div>'); //close .collection then .row
-   	
+
    	body.push('</div></div>'); //close .card.main then .parent
-   	
-   	
+
+
    	//put in the html
     $("body").html(body.join(""));
     $("body").removeAttr("bgcolor");
@@ -318,7 +318,7 @@ function startMenu()
 		"width": "100%",
 		"height": "100%"
 	});
-	
+
 	$(".main").css({
 		"display": "inline-block",
 		"width": "500px",
@@ -326,26 +326,26 @@ function startMenu()
 		"padding-top": "10px",
 		"text-align": "left"
     });
-    
+
 	$(".row").css({
     	"margin-bottom": "5px"
     });
-    
+
     $(".barIcons a").css({
 		"padding": "5px",
 		"margin-right": "10px"
     });
-    
+
     $(".barIcons").css({
     	"margin": "1.14rem 10px 0.912rem"
     });
-    
+
     var extracss = "<style>.parent:before {content: '';display: inline-block;height: 100%;vertical-align: middle;margin-right: -0.25em; /* Adjusts for spacing */}</style>";
     //credit https://css-tricks.com/centering-in-the-unknown/
-    
+
     //inject css
     $("head").append(extracss);
-	
+
     //show body
     $('body').fadeIn(1000);
 }
@@ -353,42 +353,42 @@ function startMenu()
 function startError()
 {
     var contents = $.trim($("body").text());
-    
+
     if(/Invalid Login/gi.test(contents))
     {
     	currPage = "wrongidpw";
-    	
+
     	//set title
 		document.title = "Login Error";
-		
+
 		//style the body
 		$("body").css({
 			"background": colours.background,
 			"display": "none"
 		});
-    	
+
     	//process info
    		var infos = grabData(currPage);
-   		
+
    		var body = [];
-   		
+
    		body.push('<div class="card main red darken-3">');
-   		
+
    		body.push('<div class="card-content white-text">');
    		body.push('<span class="card-title">Error</span><p>There was an error logging in.<br>Please check your login credentials and try again.</p>');
    		body.push('</div>'); //close .card-content
-   		
+
    		body.push('<div class="card-action">');
    		body.push('<a href="' + infos.link + '">Try Again</a>');
    		body.push('</div>'); //close .card-action
-   		
+
    		body.push('</div>'); //close .card.main
-   		
+
    		//put in the html
 		$("body").html(body.join(""));
 		$("body").removeAttr("bgcolor");
 		$("body").removeAttr("oncontextmenu");
-   		
+
    		//apply the styles
    		$(".main").css({
 			"position": "absolute",
@@ -400,45 +400,45 @@ function startError()
 			"max-height": "196px",
 			"margin": "auto"
 		});
-   		
+
 		//show body
     	$('body').fadeIn(1000);
     }
     else if(contents != "")
     {
     	currPage = "loginError";
-    	
+
     	//set title
 		document.title = "Login Error";
-		
+
 		//style the body
 		$("body").css({
 			"background": colours.background,
 			"display": "none"
 		});
-    	
+
     	//process info
    		var infos = grabData(currPage);
-   		
+
    		var body = [];
-   		
+
    		body.push('<div class="card main red darken-3">');
-   		
+
    		body.push('<div class="card-content white-text">');
    		body.push('<span class="card-title">Error</span><p>There was an error logging in. You probably didn\'t log out of your EMB.</p><p>Please logout and try again.</p>');
    		body.push('</div>'); //close .card-content
-   		
+
    		body.push('<div class="card-action">');
    		body.push('<a href="' + infos.logout + '">Logout</a>');
    		body.push('</div>'); //close .card-action
-   		
+
    		body.push('</div>'); //close .card.main
-   		
+
    		//put in the html
 		$("body").html(body.join(""));
 		$("body").removeAttr("bgcolor");
 		$("body").removeAttr("oncontextmenu");
-   		
+
    		//apply the styles
    		$(".main").css({
 			"position": "absolute",
@@ -450,7 +450,7 @@ function startError()
 			"max-height": "220px",
 			"margin": "auto"
 		});
-   		
+
 		//show body
     	$('body').fadeIn(1000);
     }
@@ -459,52 +459,52 @@ function startError()
 function startUtil(smb)
 {
 	currPage = 'util';
-    
+
     //set title
     document.title = "Utilities";
-    
+
     //style the body
     $("body").css({
     	"background": colours.background,
     	"display": "none"
     });
-    
+
     //process info
    	var infos = grabData(currPage);
-   	
+
    	var body = [];
-   	
+
    	body.push('<div class="parent"><div class="card main">');
-   	
+
    	body.push('<div class="row">');
-   	
+
    	//icon
    	if(document.referrer && !(/menu_htm\.pl/ig.test(document.referrer))) body.push('<div class="left barIcons"><a class="material-icons waves-effect waves-teal btn-flat" href="' + document.referrer +'" title="Utility Functions">arrow_back</a></div>');
    	//header
    	body.push('<h4 class="right" style="margin-right: 20px">Utility Menu</h4>');
-   	
+
    	body.push('</div>'); //close .row
-   	
-   	
+
+
    	//main collection
    	body.push('<div class="row"><div class="collection">');
-   	
+
    	var len = infos.links.length;
    	for(var i = 0; i < len; i++)
-   	{   		
+   	{
 		var obj = infos.links[i];
-		
+
 		body.push('<a href="'+ obj.href +'" class="collection-item" title="' + obj.title + '">' + obj.title + '</a>');
    	}
-   	
+
    	body.push('</div></div>'); //close .collection then .row
-   	
+
    	body.push('</div></div>'); //close .card.main then .parent
-   	
+
    	//put in the html
     $("body").html(body.join(""));
     $("body").removeAttr("bgcolor");
-    
+
     //apply the styles
 	$(".parent").css({
 		"text-align": "center",
@@ -512,7 +512,7 @@ function startUtil(smb)
 		"width": "100%",
 		"height": "100%"
 	});
-	
+
 	$(".main").css({
 		"display": "inline-block",
 		"width": "500px",
@@ -520,22 +520,22 @@ function startUtil(smb)
 		"padding-top": "10px",
 		"text-align": "left"
     });
-    
+
     $(".barIcons a").css({
 		"padding": "5px",
 		"margin-left": "10px"
     });
-    
+
     $(".barIcons").css({
     	"margin": "1.14rem 10px 0.912rem"
     });
-    
+
     var extracss = "<style>.parent:before {content: '';display: inline-block;height: 100%;vertical-align: middle;margin-right: -0.25em; /* Adjusts for spacing */}</style>";
     //credit https://css-tricks.com/centering-in-the-unknown/
-    
+
     //inject css
     $("head").append(extracss);
-	
+
 	//show body
 	$('body').fadeIn(1000);
 }
@@ -543,50 +543,50 @@ function startUtil(smb)
 function startRoot()
 {
 	currPage = 'root';
-    
+
     //set title
     document.title = "Welcome to EMBs";
-    
+
     //style the body
     $("body").css({
     	"background": colours.background,
     	"display": "none"
     });
-    
+
     //process info
    	var infos = grabData(currPage);
-   	
+
    	var body = [];
-   	
+
    	body.push('<div class="parent"><div class="card main">');
-   	
+
    	body.push('<div class="row" style="margin-bottom: 10px;">');
-   	
+
    	//header
    	body.push('<h4 class="left" style="margin-left: 20px">Choose EMB</h4>');
-   	
+
    	body.push('</div>'); //close .row
-   	
-   	
+
+
    	//main collection
    	body.push('<div class="row"><div class="collection">');
-   	
+
    	var len = infos.links.length;
    	for(var i = 0; i < len; i++)
-   	{   		
+   	{
 		var obj = infos.links[i];
-		
+
 		body.push('<a href="'+ obj.href +'" class="collection-item" title="' + obj.title + '">' + obj.title + '</a>');
    	}
-   	
+
    	body.push('</div></div>'); //close .collection then .row
-   	
+
    	body.push('</div></div>'); //close .card.main then .parent
-   	
+
    	//put in the html
     $("body").html(body.join(""));
     $("body").removeAttr("bgcolor");
-    
+
     //apply the styles
 	$(".parent").css({
 		"text-align": "center",
@@ -594,7 +594,7 @@ function startRoot()
 		"width": "100%",
 		"height": "100%"
 	});
-	
+
 	$(".main").css({
 		"display": "inline-block",
 		"width": "500px",
@@ -602,13 +602,13 @@ function startRoot()
 		"padding-top": "10px",
 		"text-align": "left"
     });
-    
+
     var extracss = "<style>.parent:before {content: '';display: inline-block;height: 100%;vertical-align: middle;margin-right: -0.25em; /* Adjusts for spacing */}</style>";
     //credit https://css-tricks.com/centering-in-the-unknown/
-    
+
     //inject css
     $("head").append(extracss);
-	
+
 	//show body
 	$('body').fadeIn(1000);
 }
@@ -617,44 +617,44 @@ function startMain(viewpl)
 {
 	console.log("Loading Main");
     currPage = 'main';
-    
+
     //set title
     document.title = "Electronic Messaging Board";
-    
+
     //style the body
     $("body").css({
     	"background": colours.background,
     	"display": "none"
     });
-    
+
     $("html").prepend('<div class="progress' + (colours.loaderMain.main.length ? " " : "") + colours.loaderMain.main + '" id="loading" style="position: fixed; top: 0px; margin-top: 0px; z-index: 999	"><div class="indeterminate' + (colours.loaderMain.accent.length ? " " : "") + colours.loaderMain.accent + '"></div></div>');
     console.log("Loading bar OK");
-    
+
     //Request Permission for notifications
 	if (Notification.permission !== 'denied') {
 		Notification.requestPermission();
 	}
-    
+
     //process info
     console.log("Grabbing Data");
    	var infos = grabData(currPage);
    	console.log("Data grabbed");
    	var body = [];
-   	
+
    	//console.log(infos.error);
-   	
+
    	//if it errored out
    	if(infos.error || infos.topbar.error)
    	{
    		//set title
 		document.title = "Error";
-   		
+
    		body.push('<div class="card main red darken-3">');
-   		
+
    		body.push('<div class="card-content white-text">');
-   		
+
    		var errorMsg = "";
-   		
+
    		if(typeof(infos.errorReason) != "undefined")
    		{
    			errorMsg = " <i>(Error: ";
@@ -668,21 +668,21 @@ function startMain(viewpl)
    			errorMsg += ")</i>";
    		}
    		//the above code is not extensively tested
-   		
+
    		body.push('<span class="card-title">Error</span><p>There was an error retrieving the contents. There was probably a problem with EMB login.' + errorMsg + '</p><p>Please try logging in again.</p>');
    		body.push('</div>'); //close .card-content
-   		
+
    		body.push('<div class="card-action">');
    		body.push('<a href="/">Return to Login</a>');
    		body.push('</div>'); //close .card-action
-   		
+
    		body.push('</div>'); //close .card.main
-   		
+
    		//put in the html
 		$("body").html(body.join(""));
 		$("body").removeAttr("bgcolor");
 		$("body").removeAttr("oncontextmenu");
-   		
+
    		//apply the styles
    		$(".main").css({
 			"position": "absolute",
@@ -700,7 +700,7 @@ function startMain(viewpl)
    		console.log("Sorting Messages");
    		var sortedMessages = sortMessages(infos.messages); // or delta
    		console.log("Messages sorted");
-   		
+
    		//add top bar
 
         //dropdown
@@ -712,7 +712,7 @@ function startMain(viewpl)
         body.push('<li><a id="logout" href="' + infos.topbar.logout + '" title="Logout and Exit EMBs"><i class="material-icons unselectable">exit_to_app</i> <span>Logout</span></a></li>');
         body.push('</ul>');
         //end dropdown
-        
+
         //main navbar
    		body.push('<div class="navbar-fixed"><nav><div class="nav-wrapper hauptnav'+ (colours.nav ? " " : "") + colours.nav +'">');
    		body.push('<a href="http://www.hci.edu.sg/" class="brand-logo unselectable" style="margin-left: 25px">Hwa Chong Institution</a>');
@@ -731,18 +731,18 @@ function startMain(viewpl)
 
    		console.log("Topbar OK");
         //end topbar
-   		
+
    		//add refresh, util, logout
-   		
+
    		//style="height:50px;"
    		body.push('<div class="row l12 main">');
-   		
+
    		//messages
 	   	body.push('<div class="card col l12 nopadding msgs">');
-	   	
+
 	   	body.push('<ul class="collection with-header" style="margin-top: 0px;">');
 	   	console.log("open ul OK");
-	   	
+
 	   	body.push('<li class="collection-header"><h5 class="unselectable"><i class="material-icons">announcement</i> Important Messages</h5></li>');
 	   	console.log("starting for loop");
 	   	for(var type in sortedMessages)
@@ -750,7 +750,7 @@ function startMain(viewpl)
 	   		if(sortedMessages.hasOwnProperty(type))
 	   		{
 	   			console.log("Reading", type);
-	   			if(type == "normalUnread") 
+	   			if(type == "normalUnread")
 	   			{
 	   				console.log("in the if loop");
 	   				console.log(sortedMessages.imptUnread.length, sortedMessages.impt.length);
@@ -767,14 +767,14 @@ function startMain(viewpl)
 	   			body.push('<div id="' + type + '">');
 	   			var m = sortedMessages[type];
 	   			console.log(m);
-				for (var i = 0, len = m.length; i < len; i++) 
+				for (var i = 0, len = m.length; i < len; i++)
 			   	{
 			   		console.log("Message", i);
 			   		var msge = m[i];
 			   		body.push(printMessage(type, msge));
 				}
 				console.log("for loop done");
-				if(type == "normal") 
+				if(type == "normal")
 	   			{
 	   				console.log("Type is normal. checking whether there were no messages");
 	   				if(!(sortedMessages.normalUnread.length + sortedMessages.normal.length))
@@ -786,23 +786,23 @@ function startMain(viewpl)
 				console.log(type, "OK");
 			}
 	   	}
-	   	
+
 	   	//make a div that is clickable and handle everything later
 	   	//to read http://messages.hci.edu.sg/cgi-bin/emb/update.pl
-	   	
+
 	   	body.push('</ul>'); //close .collection
 	   	body.push('</div>'); //close messages
-	   	
+
 	   	//content panel
 	   	body.push('<div class="card col nopadding cnt hidden">');
 	   	body.push('</div>'); //close .cnt
-	   	
+
 	   	body.push('</div>'); //close .row.s12
-	   	
+
 	   	//footer
 	   	body.push('<footer class="page-footer unselectable'+ (colours.footer ? " " : "") + colours.footer +'">');
-   		body.push('<div class="footer-copyright"><div class="container">Login Count: ' + infos.topbar.loginCount 
-					+ ' , Last: ' + infos.topbar.lastlogin.year 
+   		body.push('<div class="footer-copyright"><div class="container">Login Count: ' + infos.topbar.loginCount
+					+ ' , Last: ' + infos.topbar.lastlogin.year
 					+ '-' + (infos.topbar.lastlogin.month < 10 ? '0' : '') + infos.topbar.lastlogin.month
 					+ '-' + (infos.topbar.lastlogin.day < 10 ? '0' : '') + infos.topbar.lastlogin.day
 					+ ' ' + (infos.topbar.lastlogin.hour < 10 ? '0' : '') + infos.topbar.lastlogin.hour
@@ -810,7 +810,7 @@ function startMain(viewpl)
                     + ((infos.posted > 0) ? ('<span class="center messagesposted defaultCursor noPointerEvents">' + infos.posted + ' message' + ((infos.posted > 1) ? "s" : "") + ' ' + ((infos.posted > 1) ? "were" : "was") + ' posted today.</span>') : '<span class="center messagesposted defaultCursor noPointerEvents">No messages were posted today.</span>')
 					+'<a class="grey-text text-lighten-4 right pointer" href="' + infos.topbar.help + '" title="EMB Help">EMB Help</a></div></div>');
 	   	body.push('</footer>');
-	   	
+
 	   	//extracss
 	   	var extraCSS = [];
 	   	extraCSS.push('<style>');
@@ -832,7 +832,7 @@ function startMain(viewpl)
 	   	extraCSS.push('.spin.faster{-moz-animation: spin 0.5s infinite linear;-webkit-animation: spin 0.5s infinite linear;animation: spin 0.5s infinite linear;} ');
 	   	extraCSS.push('@-moz-keyframes spin {0% {-moz-transform: rotate(0deg);} 100% {-moz-transform: rotate(360deg);}; } @-webkit-keyframes spin {0% {-moz-transform: rotate(0deg);} 100% {-moz-transform: rotate(360deg);}; } ');
 	   	//spin credit: http://www.alessioatzeni.com/blog/css3-loading-animation-loop/
-	   	
+
 	   	//.collection-itom.avatar (:hover)
 	   	//.collection-header .material-icons
 	   	//.collection-header
@@ -855,7 +855,7 @@ function startMain(viewpl)
 	   	extraCSS.push(".nonewmessages {transition: all 0.5s ease;} ");
 	   	extraCSS.push(".nonewmessages p {margin: 0px} ");
 	   	//.notif{transition: all 0.2s ease; opacity: 1; } .notif:hover{opacity: 0.5 !important;}
-	   	
+
 	   	//content
 	   	extraCSS.push(".main {position: relative; margin: 20px 30px 0px 30px;}");
 	   	extraCSS.push(".msgs {transition: all 0.3s ease-in-out;}"); //0.55s cubic-bezier(0.19, 1, 0.22, 1);}
@@ -865,8 +865,8 @@ function startMain(viewpl)
 	   	extraCSS.push(".cnt .row.hidden{opacity: 0; height: 0px;}");
 	   	extraCSS.push(".cnt .avt {height: 42px; display: inline-block; width: 42px; text-align: center; line-height: 42px; font-size: 22px; position: absolute; left: 20px; top: 20px;}");
         extraCSS.push(".cnt .cntcenter {margin-top: 0px;}");
-	   	extraCSS.push(".msgcontent {overflow-y: auto; height: calc(100% - " + settings.footer.height + " - " + settings.footer.padding + " - " + settings.footer.padding + " - " + settings.footer.margin + " - 45px - 35px) !important;}"); //originally 5px
-        //extraCSS.push(".msgcontent {overflow-y: auto;}"); 
+	   	extraCSS.push(".msgcontent {overflow-y: auto; height: calc(100% - " + settings.footer.height + " - " + settings.footer.padding + " - " + settings.footer.padding + " - " + settings.footer.margin + " - 5px) !important;}"); //changed to 45px - 35px
+        //extraCSS.push(".msgcontent {overflow-y: auto;}");
         extraCSS.push(".msgcontent .cntwrapper {height: 100%; padding: 20px 20px 0px 20px;}");
         extraCSS.push(".msgcontent .cntwrapper a:hover {text-decoration: underline;}");
         extraCSS.push(".msgcontent .cntwrapper .attachments a:hover {text-decoration: none;}");
@@ -886,21 +886,21 @@ function startMain(viewpl)
         extraCSS.push(".attachSize {color: #444; display: block; line-height: 32px; margin-top: 10px; bottom: 10px; position: absolute; width: calc(100% - 20px);}");
         extraCSS.push(".attachSize img {right: 5px; height: 32px; width: 32px; position: absolute;}");
         extraCSS.push(".choicesRadioOption {display: inline-block; padding-right: 10px; padding-bottom: 5px; border-bottom: 1px solid #ccc;}");
-	   	
+
 	   	//footer
 	   	extraCSS.push("footer a:hover {text-decoration: underline; } ");
         extraCSS.push("footer.page-footer {font-weight: 400 !important; padding: " + settings.footer.padding + " 0px; margin-top: " + settings.footer.margin + ";}");
         extraCSS.push("footer.page-footer .footer-copyright {height: " + settings.footer.height + "; line-height: " + settings.footer.height + ";} ");
         extraCSS.push("footer .messagesposted {position: absolute; left: 0px; right: 0px;}");
-	   	
+
 	   	extraCSS.push("</style>");
-	   	
+
 	   	//put in the html
 		$("body").html(body.join(""));
 		$("body").removeAttr("bgcolor");
 		$("body").removeAttr("oncontextmenu");
 		$("head").append(extraCSS.join(""));
-		
+
         //initialize javascripts
         $(".dropdown-button").dropdown();
 
@@ -908,7 +908,7 @@ function startMain(viewpl)
 		/*$(".main").css({
 			"margin": "20px 50px"
 		});*/
-	
+
 		//add eventHandlers
 		$("#refresh").click(function(e) {
 			if(!$(this).hasClass("spin"))
@@ -917,9 +917,9 @@ function startMain(viewpl)
 				refreshMessages("view", true);
 			}
 		});
-		
+
 		initializeMessages();
-		
+
 		$("#search").click(function(e){
 
 			//add search here !!!!!
@@ -927,12 +927,12 @@ function startMain(viewpl)
 			//if not in result apply class queuing
 			//rememeber to add a :before element that is the min height of the .cnt
 		});
-	
+
 		//make a timer to do ajax every 2 minute(s)	for updates
 		globalTimer = setInterval(function(){ refreshMessages("view", false) }, 120000);
-		
+
 	}
-	
+
 	//show body
 	$('body').fadeIn(1000, function(){
 		lastUpdated = infos.timestamp;
@@ -970,16 +970,16 @@ function initializeMessages()
         //console.log("selected", selectedMessages);
         e.stopPropagation();
     });
-    
+
     $(".collection-item").click(function(e) {
-    
+
         //check not selected
         if(!$(this).hasClass("selected"))
         {
             var msgobj = $.parseJSON(he.decode(this.dataset.obj));
             if(!currentMessage)
             {
-                currentMessage = msgobj;                
+                currentMessage = msgobj;
                 $(".msgs").removeClass("l12").addClass("l4");
                 $(".cnt").removeClass("hidden");
                 fetchMessage(currentMessage);
@@ -1010,8 +1010,8 @@ function initializeMessages()
             console.log("Messaage is selected");
         }
     });
-    
-    
+
+
     $(".mark").click(function(e){
         //$(this).html('<div class="preloader-wrapper active" style="height: ' + $(this).height() + '"><div class="spinner-layer spinner-blue-only"><div class="circle-clipper left"><div class="circle"></div></div><div class="gap-patch"><div class="circle"></div></div><div class="circle-clipper right"><div class="circle"></div></div></div></div>');
         var ele = this;
@@ -1022,12 +1022,12 @@ function initializeMessages()
         }
         $(ele).html("filter_tilt_shift");
         $(ele).addClass("spin");
-    
+
         //do ajax to mark message
         var jqxhr = $.ajax({
             url: "/cgi-bin/emb/choice.pl?view.pl?date??",
-            method: "POST", 
-            data: { 
+            method: "POST",
+            data: {
                 'msgid': ele.dataset.msgid,
                 //'choice': "Back/Submit",
                 'attn': ( currentlyMarked ? "B" : "A" ) /*A is yes, B is no*/
@@ -1035,8 +1035,8 @@ function initializeMessages()
         }).done(function(res, textStatus, jqXHR){
             //console.log(textStatus);
             $(ele).removeClass("spin");
-    
-            if(currentlyMarked) 
+
+            if(currentlyMarked)
             {
                 $(ele).html("star_border");
                 $(ele).removeClass("activated");
@@ -1054,12 +1054,12 @@ function initializeMessages()
         }).fail(function(jqXHR, textStatus, errorThrown) {
             //console.log(textStatus);
             $(ele).removeClass("spin");
-            
+
             $(ele).html("warning");
             $(ele).addClass("asyncError");
         })
         .always(function() {});
-        
+
         e.stopPropagation();
     });
 }
@@ -1070,7 +1070,7 @@ function init()
     var page1 = page.split(' ')[1];
     var page2 = page.split(' ')[0];
     var attachType = (/\/(attach)\//.test(window.location.toString())) || (/\.(png|jpe?g|gif|tiff?)/gi.test(window.location.toString()));
-    
+
     if(window.location.pathname == "/")
     {
     	addMaterial();
@@ -1131,7 +1131,7 @@ function init()
 		        if(page1=='smb' || page1=='emb')
 		        {
 		           	if(attachType) materialize = false;
-		           	else if(page1 == page2) 
+		           	else if(page1 == page2)
 		           	{
 		           		materialize = false;
 		           		if(window.location.pathname == "/emb/")
@@ -1147,7 +1147,7 @@ function init()
 							}*/
 		           		}
 		       		}
-		           	else 
+		           	else
 		           	{
 				       	addMaterial();
 				       	startLogin();
@@ -1193,18 +1193,18 @@ function fetchMessage(msgobj)
 	//$(".cnt").html("");
 	//put in loading
     $(".cnt").html('<div class="progress' + (colours.loaderSecondary.main.length ? " " : "") + colours.loaderSecondary.main + ' cntcenter" id="msgloader"><div class="indeterminate' + (colours.loaderSecondary.accent.length ? " " : "") + colours.loaderSecondary.accent + '"></div></div>');
-	
+
     retrieving = true;
-    
+
     //settle where to grep from
     //defaults to grepping from view
-    
+
     //obtaining the data
     console.log(msgobj.href);
     var jqxhr = $.ajax({
         url: msgobj.href,
         dataType: "html",
-        method: "GET", 
+        method: "GET",
         async: false
     }).done(function(data){
         var response = $('<html />').html(data);
@@ -1213,7 +1213,7 @@ function fetchMessage(msgobj)
         var recordedResponses = false;
         var error = false;
         error = /No such file or directory\)/gi.test(response.find("body").text());
-        
+
         if(!error)
         {
             //if successful
@@ -1267,7 +1267,7 @@ function fetchMessage(msgobj)
                 attachmentnode.parent().nextAll().remove();
                 attachmentnode.parent().remove();
             }
-            
+
             while($.trim(response.find("div *:not(img, p br):last").html()) == "")
             {
                 response.find("div *:not(img, p br):last").remove();
@@ -1284,7 +1284,7 @@ function fetchMessage(msgobj)
             head.push('<p>From: ' + msgobj.fullname + '<span class="msgdate"> / ' + msgobj.date + '</span><br>To: ' + msgobj.attention + '</p>');
             head.push("</div>"); //close .msgHeaderContent
             head.push('</div>'); //close .msgheader
-            
+
             var body = [];
             body.push('<div class="row msgcontent hidden">');
             body.push('<div class="cntwrapper">');
@@ -1348,7 +1348,7 @@ function fetchMessage(msgobj)
 
             body.push('</div>'); //close .cntwrapper
             body.push('</div>'); //close .msgcontent
-            
+
             if(!msgobj.read)
             {
                 msgobj.read = true;
@@ -1369,7 +1369,7 @@ function fetchMessage(msgobj)
                 lastCharacter   : {
                     /*  Remove these characters from the end of the truncated text. */
                     remove: [ ' ', ',', ';', '.', '!', '?' ],
-                    /*  Don't add an ellipsis if this array contains 
+                    /*  Don't add an ellipsis if this array contains
                     the last character of the truncated text. */
                     noEllipsis: []
                 }
@@ -1390,7 +1390,7 @@ function fetchMessage(msgobj)
                 }
 
                 //check if indeterminate is chosen
-                if(!dataObj.choice) 
+                if(!dataObj.choice)
                 {
                     if(recordedResponses.choice) dataObj.choice = "";
                     else delete dataObj["choice"];
@@ -1399,7 +1399,7 @@ function fetchMessage(msgobj)
                 //perform some black magic to submit
                 var jqxhr = $.ajax({
                     url: "/cgi-bin/emb/choice.pl?view.pl?date??",
-                    method: "POST", 
+                    method: "POST",
                     data: dataObj
                 }).done(function(res, textStatus, jqXHR){
                     toast("Response Submitted!");
@@ -1414,13 +1414,13 @@ function fetchMessage(msgobj)
             });
             $("#msgloader").remove();
         }
-        
-    }).fail(function(jqXHR, textStatus, errorThrown) { 
+
+    }).fail(function(jqXHR, textStatus, errorThrown) {
         /*show error*/
         // TO DO !!!!!
         err("Error: " + errorThrown);
     }).always(function() {});
-    
+
     retrieving = false;
 }
 
@@ -1477,16 +1477,16 @@ function refreshMessages(page, manual, options)
 		var opt = $.extend({
 			"date": false
 		}, options);
-		
+
 		var newMessages = getMessages(page, opt);
 		var delta = newMessages.delta;
-		
+
 		if(manual)
 		{
 			if(page == "view")
 			{
 				var messages = sortMessages(delta);
-				
+
 				if(delta.length > 0)
 				{
 					//adding messages
@@ -1496,7 +1496,7 @@ function refreshMessages(page, manual, options)
 				   		{
 				   			var toBeAdded = [];
 				   			var m = messages[type];
-							for (var i = 0, len = m.length; i < len; i++) 
+							for (var i = 0, len = m.length; i < len; i++)
 						   	{
 						   		var msge = m[i];
 						   		toBeAdded.push(printMessage(type, msge, true));
@@ -1536,7 +1536,7 @@ function refreshMessages(page, manual, options)
 			   		{
 			   			var toBeAdded = [];
 			   			var m = messages[type];
-						for (var i = 0, len = m.length; i < len; i++) 
+						for (var i = 0, len = m.length; i < len; i++)
 					   	{
 					   		var msge = m[i];
 					   		toBeAdded.push(printMessage(type, msge, true));
@@ -1546,27 +1546,27 @@ function refreshMessages(page, manual, options)
 			   	}
 
                 initializeMessages();
-			   	
+
 			   	if(delta.length > 0)
 			   	{
 			   		//yay there are new messages
 			   		//add code to show tooltip !!!!!
-			   		
+
 		   			//show notif if window is not in focus and there are new messages
 			   		if(!windowFocus)
 			   		{
 			   			//content, title, img, in order of necessity
-			   			var x = notify("You have " + delta.length + " new messages, of which " + messages.imptUnread.length + " are important", "New EMB Messages", "/smb/hci.png"); 
+			   			var x = notify("You have " + delta.length + " new messages, of which " + messages.imptUnread.length + " are important", "New EMB Messages", "/smb/hci.png");
 			   			x.onclick = function()
 			   			{
-			   				$(window).focus(); 
+			   				$(window).focus();
 			   				refreshMessages(page, true, opt);
 		   				}
 			   		}
 			   		else
 			   		{
 			   			//show a toast !!!!!
-			   			
+
 			   			toast(delta.length + ' New Messages.<br>Click <i class="material-icons">refresh</i> to refresh.', 3000);
 			   			//Materialize.toast("5 New Messages. Click&nbsp;<i class='material-icons'>refresh</i>&nbsp;to refresh.", 3000, "rounded unselectable grabbable notif");
 						//Materialize.toast('I am a toast!', 3000, 'rounded');
@@ -1587,9 +1587,9 @@ function printMessage(type, msg, queuing)
 	var ret = [];
 	ret.push('<li class="collection-item avatar unselectable msg_' + type + (queuing ? " queuing" : "") + '" data-obj="' + he.encode(JSON.stringify(msg), {'useNamedReferences': true}) + '" data-msgid="' + msg.uid + '" id="msg_' + msg.uid + '">');
 	ret.push('<span class="circle avt unselectable" style="background-color: ' + getColourfromText(msg.abbrname) + '; color: white" data-msgid="' + msg.uid + '" data-letter="' + msg.abbrname[0].toUpperCase() + '">'+ msg.abbrname[0].toUpperCase() +'</span>');
-	
+
 	ret.push('<span class="title' + ((/unread/gi.test(type)) ? ' unread' : '') + '">' + msg.title + '</span>');
-	
+
 	ret.push('<p>From: ' + msg.fullname + '<br>To: ' + msg.attention + '</p>');
 	ret.push('<span class="secondary-content"><i class="material-icons mark' + (!!(msg.marked) ? " activated" : "") + '" data-msgid="' + msg.uid + '">' + (!!(msg.marked) ? "star" : "star_border") + '</i></span>');
 	ret.push('</li>');
@@ -1619,40 +1619,40 @@ function sortMessages(messageArray)
 function getMessages(page, options)
 {
 	retrieving = true;
-	
+
 	var opt = $.extend({
 		"date" : false,
-		"async": false, 
+		"async": false,
 		"callback": null
 	}, options);
-	
+
 	//settle where to grep from
 	//defaults to grepping from view
 	var pageurl = "/cgi-bin/emb/view.pl";
-	var view = true; 
-	
+	var view = true;
+
 	if(page == "archive")
 	{
 		view = false;
 		pageurl = "/cgi-bin/emb/view_archive.pl";
 	}
 	//else if(page == "view") {} //doesn't change from default
-	
+
 	if(opt.date) pageurl += "?date=" + date;
-	
-	
+
+
 	//obtaining the data
 	var retu = {};
-	
+
 	var jqxhr = $.ajax({
 		url: pageurl,
 		dataType: "html",
-		method: "GET", 
+		method: "GET",
 		async: opt.async
 	}).done(function(data){
 		var response = $('<html />').html(data);
 		//credit https://stackoverflow.com/questions/405409/use-jquery-selectors-on-ajax-loaded-html#7831229
-		
+
 		retu.error = /No such file or directory\)/gi.test(response.find("body").text());
         if(/Illegal Attempt/gi.test(response.find("body").text()))
         {
@@ -1662,15 +1662,15 @@ function getMessages(page, options)
                 "errorThrown": "Illegal Attempt"
             }
         }
-		
+
 		if(!retu.error)
 		{
 			retu.posted = view ? parseInt(response.find("font:contains('#Messages posted today:')").html().split(": ")[1]) : -1;
 			retu.who = view ? response.find("input[name='xwho']").val() : false;
-		
+
 			var messages = [];
 			var deltaMessages = [];
-		
+
 			response.find("table tr").each(function(index) {
 				if(index) //skips the header row
 				{
@@ -1720,7 +1720,7 @@ function getMessages(page, options)
 							//put archive traverse code here !!!!!
 						}
 					});
-				
+
 					if(currentMessages.indexOf(message.uid) == -1) {
 						currentMessages.push(message.uid);
 						deltaMessages.push(message);
@@ -1739,22 +1739,22 @@ function getMessages(page, options)
 			retu.messages = messages;
 			retu.delta = deltaMessages;
 		}
-		
+
 		if(opt.callback) opt.callback(retu);
-		
+
 		//console.log(retu);
-		
-	}).fail(function(jqXHR, textStatus, errorThrown) { 
-		/*show error*/ 
-		retu.error = true; 
+
+	}).fail(function(jqXHR, textStatus, errorThrown) {
+		/*show error*/
+		retu.error = true;
 		retu.errorReason = {
 			"textStatus": textStatus,
 			"errorThrown": errorThrown
 		}
 	}).always(function() {});
-	
+
 	retu.timestamp = Date.now();
-	
+
 	retrieving = false;
 	return retu;
 }
@@ -1763,20 +1763,20 @@ function getTopbar(options)
 {
 	console.log("getting topbar");
 	var opt = $.extend({
-		"async": false, 
+		"async": false,
 		"callback": null
 	}, options);
-	
-	
+
+
 	//obtaining the data
 	var retu = {};
-	
+
 	retu.error = false;
-	
+
 	var jqxhr = $.ajax({
 		url: "/cgi-bin/emb/menu_htm.pl",
 		dataType: "html",
-		method: "GET", 
+		method: "GET",
 		async: opt.async
 	}).done(function(data){
 		console.log("ajax success");
@@ -1794,7 +1794,7 @@ function getTopbar(options)
                     break;
                 case 1:
                     if(/post/gi.test($.trim($(this).children("a").text()))) retu.post = $(this).children("a").attr("href");
-                    else 
+                    else
                     {
                         retu.archive = $(this).children("a").attr("href");
                         i++;
@@ -1815,7 +1815,7 @@ function getTopbar(options)
                     break;
                 case 5:
                     if(/Webmail/gi.test($.trim($(this).children("a").text()))) retu.hciwebmail = $(this).children("a").attr("href");
-                    else 
+                    else
                     {
                         retu.help = $(this).children("a").attr("href");
                         i++;
@@ -1847,20 +1847,20 @@ function getTopbar(options)
             }
             console.log(idx, "OK");
         });
-		
+
 		if(opt.callback) opt.callback(retu);
-		
-	}).fail(function(jqXHR, textStatus, errorThrown) { 
-		/*show error*/ 
-		retu.error = true; 
+
+	}).fail(function(jqXHR, textStatus, errorThrown) {
+		/*show error*/
+		retu.error = true;
 		retu.errorReason = {
 			"textStatus": textStatus,
 			"errorThrown": errorThrown
 		}
 	}).always(function() {});
-	
+
 	//console.log(retu);
-	
+
 	return retu;
 }
 
@@ -1888,9 +1888,9 @@ function err(errormsg)
 function notify(msg, title, icon) {
 
 	var notif;
-	
+
   	// Let's check if the browser supports notifications
-	if (!("Notification" in window)) 
+	if (!("Notification" in window))
 	{
 		alert(strings["errordns"]);
 	}
@@ -1911,9 +1911,9 @@ function notify(msg, title, icon) {
 		});
 	}
 
-	// At last, if the user has denied notifications, and you 
+	// At last, if the user has denied notifications, and you
 	// want to be respectful there is no need to bother them any more.
-	
+
 	//return the notif object
 	return notif;
 }
@@ -1924,7 +1924,7 @@ function spawnNotification(theBody, theTitle, theIcon) {
 		icon: theIcon
 	};
 	var n = new Notification(theTitle, options);
-	
+
 	return n;
 }
 
@@ -1936,14 +1936,14 @@ function getColourfromText(str)
 	{
 		//console.log(str, co, idealTextColor(stringToColour(co.substr(1,3))));
 		if(idealTextColor(stringToColour(co.substr(1,3))) == "#000000") co = rgbToHex(getOpposite(co));
-		
+
 		while(idealTextColor(co) == "#000000")
 		{
 			co = changeColorLuminance(co, -0.05);
 		}
-		
+
 	}
-	
+
 	return co;
 }
 
@@ -1997,10 +1997,10 @@ function getOpposite(color)
 {
 	var temprgb = getRGBComponents(color);
 	var temphsv = RGB2HSV(temprgb);
-	
+
 	temphsv.hue = HueShift(temphsv.hue,180.0);
 	temprgb = HSV2RGB(temphsv);
-	
+
 	return temprgb;
 }
 
@@ -2051,17 +2051,17 @@ function HSV2RGB(hsv) {
 }
 
 //Adding HueShift via Jacob (see comments)
-function HueShift(h,s) { 
-    h+=s; while (h>=360.0) h-=360.0; while (h<0.0) h+=360.0; return h; 
+function HueShift(h,s) {
+    h+=s; while (h>=360.0) h-=360.0; while (h<0.0) h+=360.0; return h;
 }
 
 //min max via Hairgami_Master (see comments)
-function min3(a,b,c) { 
-    return (a<b)?((a<c)?a:c):((b<c)?b:c); 
+function min3(a,b,c) {
+    return (a<b)?((a<c)?a:c):((b<c)?b:c);
 }
 
-function max3(a,b,c) { 
-    return (a>b)?((a>c)?a:c):((b>c)?b:c); 
+function max3(a,b,c) {
+    return (a>b)?((a>c)?a:c):((b>c)?b:c);
 }
 //credit https://stackoverflow.com/questions/1664140/js-function-to-calculate-complementary-colour#1664186
 
@@ -2125,7 +2125,7 @@ function compareMessage(a, b)
 	if(type == "imptUnread")
 	{
 		ret.push('<span class="title" style="font-weight: bold;">' + msg.title + '</span>');
-		
+
 	}
 	else if (type == "impt")
 	{
@@ -2134,7 +2134,7 @@ function compareMessage(a, b)
 	else if (type == "normalUnread")
 	{
 		ret.push('<span class="title" style="font-weight: bold;">' + msg.title + '</span>');
-		
+
 	}
 	else if (type == "normal")
 	{
@@ -2143,14 +2143,14 @@ function compareMessage(a, b)
 */
 
 /*	body.push('<div id="imptUnread">');
-	for (var i = 0, len = sortedMessages.imptUnread.length; i < len; i++) 
+	for (var i = 0, len = sortedMessages.imptUnread.length; i < len; i++)
 	{
 		var msge = sortedMessages.imptUnread[i];
 		body.push(printMessage("imptUnread", msge));
 	}
 	body.push("</div>");
 	body.push('<div id="impt">');
-	for (var i = 0, len = sortedMessages.impt.length; i < len; i++) 
+	for (var i = 0, len = sortedMessages.impt.length; i < len; i++)
 	{
 		var msge = sortedMessages.impt[i];
 		body.push(printMessage("impt", msge));
@@ -2161,14 +2161,14 @@ function compareMessage(a, b)
 	body.push('<li class="collection-header"><h5 class="unselectable"><i class="material-icons">chat</i> Normal Messages</h5></li>');
 
 	body.push('<div id="normalUnread">');
-	for (var i = 0, len = sortedMessages.normalUnread.length; i < len; i++) 
+	for (var i = 0, len = sortedMessages.normalUnread.length; i < len; i++)
 	{
 		var msge = sortedMessages.normalUnread[i];
 		body.push(printMessage("normalUnread", msge));
 	}
 	body.push("</div>");
 	body.push('<div id="normal">');
-	for (var i = 0, len = sortedMessages.normal.length; i < len; i++) 
+	for (var i = 0, len = sortedMessages.normal.length; i < len; i++)
 	{
 		var msge = sortedMessages.normal[i];
 		body.push(printMessage("normal", msge));
@@ -2188,7 +2188,7 @@ function compareMessage(a, b)
 };*/
 //credit https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript-jquery#7616484
 
-$(document).ready(function() 
+$(document).ready(function()
 {
 	init();
 });
@@ -2201,7 +2201,7 @@ $(window).load(function()
 		windowFocus = true;
 		//console.log("Window Focused");
 	});
-	
+
 	$(window).blur(function()
 	{
 		windowFocus = false;

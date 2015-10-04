@@ -1,3 +1,6 @@
+===2015/10/04===
+changed the height adjustment for .msgcontent back to -5px from -(45+35) px **
+
 ===2015/09/05===
 Tried to fix the height issue, but was unsuccessful. The height needs to be $(".cnt").height()-$(".msgheader").height() [Reverted to previous code] **
 added special case fallback for attachments if the "attachment" header is wrapped in another font tag **
