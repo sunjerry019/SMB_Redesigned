@@ -53,6 +53,9 @@ I realized that chrome doesnt animate the refresh when it is clicked
 Force default font as Roboto for consistency
 easter egg: if click hci logo 5 times go to rick roll
 
+PW and OP attachment (4 Attachments) bugs
+Hover over full name will give the short name of the poster
+
 ===============DONE===================
 add post btn
 EMB Help link nt working

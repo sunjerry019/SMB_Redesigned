@@ -865,7 +865,7 @@ function startMain(viewpl)
 	   	extraCSS.push(".cnt .row.hidden{opacity: 0; height: 0px;}");
 	   	extraCSS.push(".cnt .avt {height: 42px; display: inline-block; width: 42px; text-align: center; line-height: 42px; font-size: 22px; position: absolute; left: 20px; top: 20px;}");
         extraCSS.push(".cnt .cntcenter {margin-top: 0px;}");
-	   	extraCSS.push(".msgcontent {overflow-y: auto; height: calc(100% - " + settings.footer.height + " - " + settings.footer.padding + " - " + settings.footer.padding + " - " + settings.footer.margin + " - 5px) !important;}"); //changed to 45px - 35px
+	   	extraCSS.push(".msgcontent {overflow-y: auto; height: calc(100% - " + settings.footer.height + " - " + settings.footer.padding + " - " + settings.footer.padding + " - " + settings.footer.margin + " - 5px) !important;}"); //changed to 45px - 35px;
         //extraCSS.push(".msgcontent {overflow-y: auto;}");
         extraCSS.push(".msgcontent .cntwrapper {height: 100%; padding: 20px 20px 0px 20px;}");
         extraCSS.push(".msgcontent .cntwrapper a:hover {text-decoration: underline;}");
