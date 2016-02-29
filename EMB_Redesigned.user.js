@@ -5,10 +5,11 @@
 // @include			http://messages.hci.edu.sg/*
 // @require     	http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js
 // @require			https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js
-// @version     	3.14.15
+// @version     	3.14.18
 // @description     SMB with a new look, made for browsers that support more than IE
 // ==/UserScript==
 // License: CC BY 4.0 http://creativecommons.org/licenses/by/4.0/
+// Last updated: 29 Feb 2016
 
 //Init vars
 var materialize = true;
@@ -852,6 +853,7 @@ function startMain(viewpl)
 	   	extraCSS.push(".queuing {height: 0px;} ");
         extraCSS.push(".unread {font-weight: bold;} ");
 	   	extraCSS.push(".nopadding {padding: 0px !important;} ");
+        extraCSS.push("a.collection_abbrname {color: #777}")
 	   	extraCSS.push(".nonewmessages {transition: all 0.5s ease;} ");
 	   	extraCSS.push(".nonewmessages p {margin: 0px} ");
 	   	//.notif{transition: all 0.2s ease; opacity: 1; } .notif:hover{opacity: 0.5 !important;}
@@ -871,7 +873,8 @@ function startMain(viewpl)
         extraCSS.push(".msgcontent .cntwrapper a:hover {text-decoration: underline;}");
         extraCSS.push(".msgcontent .cntwrapper .attachments a:hover {text-decoration: none;}");
         extraCSS.push(".msgHeader {margin-bottom: 0px;}");
-        extraCSS.push(".msgdate {color: #777;}")
+        extraCSS.push(".msgdate {color: #777;}");
+        extraCSS.push(".sender_abbrname {font-size: smaller; font-weight: bold;}");
 	   	extraCSS.push(".msgHeaderContent{padding: 10px 20px 20px 82px;}");
 	   	extraCSS.push(".msgHeaderTitle {font-size: 1.5em; margin-top: 5px; display: inline-block;}");
 	   	extraCSS.push(".msgHeaderContent p {margin: 0px;}");
@@ -1278,10 +1281,17 @@ function fetchMessage(msgobj)
             var head = [];
             //replace certain msgobj properties accordingly (bzw. title, attention, update, viewcount, viewlink)
             //add in date and other relevant informations !!!!!
+            var sender = {};
+
+            sender.colour = getColourfromText(msgobj.abbrname);
             head.push('<div class="row msgheader hidden">');
-            head.push('<span class="circle avt unselectable defaultCursor" style="background-color: ' + getColourfromText(msgobj.abbrname) + '; color: white">'+ msgobj.abbrname[0].toUpperCase() +'</span>');
+            head.push('<span class="circle avt unselectable defaultCursor" style="background-color: ' + sender.colour + '; color: white">'+ msgobj.abbrname[0].toUpperCase() +'</span>');
             head.push('<div class="msgHeaderContent"><span class="msgHeaderTitle">' + msgobj.title + '</span>');
-            head.push('<p>From: ' + msgobj.fullname + '<span class="msgdate"> / ' + msgobj.date + '</span><br>To: ' + msgobj.attention + '</p>');
+
+            sender.sender = msgobj.fullname;
+            if(msgobj.fullname != msgobj.abbrname) sender.sender += " <span class='sender_abbrname' style='color: " + sender.colour + ";'>(" + msgobj.abbrname + ")</span>"
+
+            head.push('<p>From: ' + sender.sender + '<span class="msgdate"> / ' + msgobj.date + '</span><br>To: ' + msgobj.attention + '</p>');
             head.push("</div>"); //close .msgHeaderContent
             head.push('</div>'); //close .msgheader
 
@@ -1443,6 +1453,7 @@ function retImg(type)
         else if(/(zip|rar|7z)/gi.test(type)) url += "archive";
         else if(/(mp3|wa?v|m4a|aif+|aac|og(g|a)|wma|vox)/.test(type)) url += "audio";
         else if(/(mp4|mpe?g|m4v|webm|mkv|flv|vob|ogv|avi|mov|wmv)/.test(type)) url += "video";
+        else url += "generic";
         //add more in time to come *****
 
         url += "_x32.png";
@@ -1590,7 +1601,7 @@ function printMessage(type, msg, queuing)
 
 	ret.push('<span class="title' + ((/unread/gi.test(type)) ? ' unread' : '') + '">' + msg.title + '</span>');
 
-	ret.push('<p>From: ' + msg.fullname + '<br>To: ' + msg.attention + '</p>');
+	ret.push('<p>From: <a class="collection_abbrname" title="' + msg.abbrname.toUpperCase() + '">' + msg.fullname + '</a><br>To: ' + msg.attention + '</p>');
 	ret.push('<span class="secondary-content"><i class="material-icons mark' + (!!(msg.marked) ? " activated" : "") + '" data-msgid="' + msg.uid + '">' + (!!(msg.marked) ? "star" : "star_border") + '</i></span>');
 	ret.push('</li>');
 
