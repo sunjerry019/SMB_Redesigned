@@ -802,12 +802,14 @@ function startMain(viewpl)
 
 	   	//footer
 	   	body.push('<footer class="page-footer unselectable'+ (colours.footer ? " " : "") + colours.footer +'">');
-   		body.push('<div class="footer-copyright"><div class="container">Login Count: ' + infos.topbar.loginCount
-					+ ' , Last: ' + infos.topbar.lastlogin.year
+   		body.push('<div class="footer-copyright"><div class="container">'
+                    + '<span class="defaultCursor"> Login Count: ' + infos.topbar.loginCount
+					+ ' / Last: ' + infos.topbar.lastlogin.year
 					+ '-' + (infos.topbar.lastlogin.month < 10 ? '0' : '') + infos.topbar.lastlogin.month
 					+ '-' + (infos.topbar.lastlogin.day < 10 ? '0' : '') + infos.topbar.lastlogin.day
 					+ ' ' + (infos.topbar.lastlogin.hour < 10 ? '0' : '') + infos.topbar.lastlogin.hour
 					+ ':' + (infos.topbar.lastlogin.minutes < 10 ? '0' : '') + infos.topbar.lastlogin.minutes
+                    + '</span>'
                     + ((infos.posted > 0) ? ('<span class="center messagesposted defaultCursor noPointerEvents">' + infos.posted + ' message' + ((infos.posted > 1) ? "s" : "") + ' ' + ((infos.posted > 1) ? "were" : "was") + ' posted today.</span>') : '<span class="center messagesposted defaultCursor noPointerEvents">No messages were posted today.</span>')
 					+'<a class="grey-text text-lighten-4 right pointer" href="' + infos.topbar.help + '" title="EMB Help">EMB Help</a></div></div>');
 	   	body.push('</footer>');
