@@ -19,10 +19,9 @@ tooltip at refresh if got new messages
 mark messages put at top
 need response put nicely in a form
 
-==in viewing box==
-put in date/viewer info, marking etc
-open in larger window
-close message
+ == viewing box ==
+ put in date/viewer info, marking etc
+ open in larger window
 
 reduce footer height to increase message height
 
@@ -54,10 +53,19 @@ Force default font as Roboto for consistency
 easter egg: if click hci logo 5 times go to rick roll
 
 PW and OP attachment (4 Attachments) bugs
-Hover over full name will give the short name of the poster
+
+ == Multiselect ==
+ use current message box?
+ messages fly in from the right
+ bulk action buttons
+    - Mark all as read
+    - Star all messages
+    - Unstar all messages
 
 ===============DONE===================
 add post btn
 EMB Help link nt working
 i forsee that anyone with a screen <= 1366*768 needs to run the thing with 90% zoom
 Realized that the problem might be due to inline style instead of global style. Move then see what are the effects.
+Hover over full name will give the short name of the poster
+close message
