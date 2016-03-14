@@ -9,7 +9,7 @@
 // @description     SMB with a new look, made for browsers that support more than IE
 // ==/UserScript==
 // License: CC BY 4.0 http://creativecommons.org/licenses/by/4.0/
-// Last updated: 29 Feb 2016
+// Last updated: 14 March 2016
 
 //Init vars
 var materialize = true;
@@ -839,9 +839,9 @@ function startMain(viewpl)
 	   	//.collection-itom.avatar (:hover)
 	   	//.collection-header .material-icons
 	   	//.collection-header
-	   	extraCSS.push(".asyncerror{color:red; opacity: 0.7 !important;} ");
+	   	extraCSS.push(".asyncerror { color:red; opacity: 0.7 !important;} ");
 	   	extraCSS.push(".asyncerror:hover {opacity: 1 !important;} ");
-	   	extraCSS.push(".collection-item.avatar{cursor:pointer; transition: all 0.4s ease-in-out;} "); //cubic-bezier(0.165, 0.84, 0.44, 1)
+	   	extraCSS.push(".collection-item.avatar { cursor:pointer; transition: all 0.4s ease-in-out;} "); //cubic-bezier(0.165, 0.84, 0.44, 1)
 	   	extraCSS.push(".collection-item.avatar:hover{ background-color: #ccc; } ");
 	   	extraCSS.push(".collection .collection-item {padding-right: 50px;} ");
 	   	extraCSS.push(".collection-header .material-icons { margin-right: 10px; } ");
@@ -851,8 +851,8 @@ function startMain(viewpl)
         extraCSS.push(".avt {display: inline-block; text-align: center; font-size: 22px; line-height: 42px; vertical-align: middle;}");
 	   	extraCSS.push(".avt.selected{background-color: #999999 !important; transform: rotatey(180deg);} ");
 	   	extraCSS.push(".collection-item.avatar.selected{background-color: #ddd !important;} ");
-	   	extraCSS.push(".avt{transition: all 0.2s linear;} ");
-	   	extraCSS.push(".queuing {height: 0px;} ");
+	   	extraCSS.push(".avt { transition: all 0.2s linear;} ");
+	   	extraCSS.push(".queuing { height: 0px;} ");
         extraCSS.push(".unread {font-weight: bold;} ");
 	   	extraCSS.push(".nopadding {padding: 0px !important;} ");
         extraCSS.push("a.collection_abbrname {color: #777}")
@@ -877,8 +877,10 @@ function startMain(viewpl)
         extraCSS.push(".msgHeader {margin-bottom: 0px;}");
         extraCSS.push(".msgdate {color: #777;}");
         extraCSS.push(".sender_abbrname {font-size: smaller; font-weight: bold;}");
+        extraCSS.push(".closeMessage {position: absolute; top: 10px; right: 10px; color: #888; transition: all 0.2s ease;}")
+        extraCSS.push(".closeMessage:hover {color: #444;}")
 	   	extraCSS.push(".msgHeaderContent{padding: 10px 20px 20px 82px;}");
-	   	extraCSS.push(".msgHeaderTitle {font-size: 1.5em; margin-top: 5px; display: inline-block;}");
+	   	extraCSS.push(".msgHeaderTitle {font-size: 1.5em; margin-top: 5px; display: inline-block; max-width: calc(100% - 20px); }");
 	   	extraCSS.push(".msgHeaderContent p {margin: 0px;}");
 	   	extraCSS.push(".msgHeaderContent {border-bottom: 1px dashed #888;}");
         extraCSS.push(".padding {height: 0px; margin-top: 10px;}");
@@ -945,6 +947,21 @@ function startMain(viewpl)
 	});
 }
 
+function toggleContentBox(open)
+{
+    if(open)
+    {
+        $(".msgs").removeClass("l12").addClass("l4");
+        $(".cnt").removeClass("hidden");
+    }
+    else
+    {
+        $(".msgs").removeClass("l4").addClass("l12");
+        $(".cnt").addClass("hidden");
+        currentMessage = false;
+    }
+}
+
 function initializeMessages()
 {
     $(".avt").off("click");
@@ -985,8 +1002,7 @@ function initializeMessages()
             if(!currentMessage)
             {
                 currentMessage = msgobj;
-                $(".msgs").removeClass("l12").addClass("l4");
-                $(".cnt").removeClass("hidden");
+                toggleContentBox(true);
                 fetchMessage(currentMessage);
                 $(".cnt").on('transitionend webkitTransitionEnd oTransitionEnd otransitionend MSTransitionEnd', function() {
                     sscroll("#msg_" + currentMessage.uid);
@@ -996,9 +1012,7 @@ function initializeMessages()
             {
                 if(currentMessage.uid == msgobj.uid)
                 {
-                    $(".msgs").removeClass("l4").addClass("l12");
-                    $(".cnt").addClass("hidden");
-                    currentMessage = false;
+                    toggleContentBox(false);
                 }
                 else
                 {
@@ -1015,7 +1029,6 @@ function initializeMessages()
             console.log("Messaage is selected");
         }
     });
-
 
     $(".mark").click(function(e){
         //$(this).html('<div class="preloader-wrapper active" style="height: ' + $(this).height() + '"><div class="spinner-layer spinner-blue-only"><div class="circle-clipper left"><div class="circle"></div></div><div class="gap-patch"><div class="circle"></div></div><div class="circle-clipper right"><div class="circle"></div></div></div></div>');
@@ -1280,6 +1293,7 @@ function fetchMessage(msgobj)
             //response.find("div *").each(function(id){});
             var messageContent = response.find("div").html();
 
+            // header of message
             var head = [];
             //replace certain msgobj properties accordingly (bzw. title, attention, update, viewcount, viewlink)
             //add in date and other relevant informations !!!!!
@@ -1294,6 +1308,7 @@ function fetchMessage(msgobj)
             if(msgobj.fullname != msgobj.abbrname) sender.sender += " <span class='sender_abbrname' style='color: " + sender.colour + ";'>(" + msgobj.abbrname + ")</span>"
 
             head.push('<p>From: ' + sender.sender + '<span class="msgdate"> / ' + msgobj.date + '</span><br>To: ' + msgobj.attention + '</p>');
+            head.push('<div class="closeMessage material-icons unselectable pointer">close</div>');
             head.push("</div>"); //close .msgHeaderContent
             head.push('</div>'); //close .msgheader
 
@@ -1386,6 +1401,13 @@ function fetchMessage(msgobj)
                     noEllipsis: []
                 }
             });
+
+            $(".closeMessage").off("click");
+            $(".closeMessage").click(function(e){
+                console.log("Close button clicked");
+                toggleContentBox(false);
+            });
+
             $("#choiceForm").on('submit', function(e){
                 var latestObject = $.parseJSON(he.decode($("#msg_" + msgobj.uid).attr("data-obj")));
                 var attn = latestObject.marked ? "A" : "B"; //"A" is yes, "B" is no
