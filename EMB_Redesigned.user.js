@@ -5,7 +5,7 @@
 // @include			http://messages.hci.edu.sg/*
 // @require     	http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js
 // @require			https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js
-// @version     	3.14.18
+// @version     	3.14.19
 // @description     SMB with a new look, made for browsers that support more than IE
 // ==/UserScript==
 // License: CC BY 4.0 http://creativecommons.org/licenses/by/4.0/
