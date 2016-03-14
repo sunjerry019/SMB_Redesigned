@@ -716,7 +716,7 @@ function startMain(viewpl)
 
         //main navbar
    		body.push('<div class="navbar-fixed"><nav><div class="nav-wrapper hauptnav'+ (colours.nav ? " " : "") + colours.nav +'">');
-   		body.push('<a href="http://www.hci.edu.sg/" class="brand-logo unselectable" style="margin-left: 25px">Hwa Chong Institution</a>');
+   		body.push('<a href="http://www.hci.edu.sg/" target="_blank" class="brand-logo unselectable" style="margin-left: 25px">Hwa Chong Institution</a>');
    		body.push('<ul class="right hide-on-med-and-down">');
 		body.push('<li><a class="pointer" id="search" title="Search"><i class="material-icons unselectable">search</i></a></li>');
 		body.push('<li><a class="pointer" id="refresh" title="Refresh"><i class="material-icons unselectable">refresh</i></a></li>');
