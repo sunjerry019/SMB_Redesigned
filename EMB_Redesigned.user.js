@@ -5,11 +5,11 @@
 // @include			http://messages.hci.edu.sg/*
 // @require     	http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js
 // @require			https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js
-// @version     	3.14.19
+// @version     	3.14.20
 // @description     SMB with a new look, made for browsers that support more than IE
 // ==/UserScript==
 // License: CC BY 4.0 http://creativecommons.org/licenses/by/4.0/
-// Last updated: 14 March 2016
+// Last updated: 16 March 2016
 
 //Init vars
 var materialize = true;
@@ -199,7 +199,7 @@ function startLogin()
 
     body.push('<div class="card main"><div class="row"><form class="col s12" action="' + infos.action + '" method="POST">');
     //hcilogo
-    body.push('<div class="row"><div class="center col s12"><img src="/smb/hci.png" style="height:50px;"></div></div>');
+    body.push('<div class="row"><div class="center col s12"><img src="/smb/hci.png" style="height:50px;" id="login_hcilogo"></div></div>');
     //userid input field
     body.push('<div class="row"><div class="input-field col s12"><i class="material-icons prefix unselectable">account_circle</i><input id="userid" type="text" class="validate" maxlength="16" name="userid" required><label for="userid">User ID</label></div></div>');
     //password
@@ -236,6 +236,11 @@ function startLogin()
 
     $(".row").css({
     	"margin-bottom": "5px"
+    });
+
+    //eventHandlers
+    $("#login_hcilogo").dblclick(function(e) {
+        window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
     });
 
     //show body
@@ -1901,6 +1906,8 @@ function getTopbar(options)
 
 function sscroll(id)
 {
+    //function that scrolls the user to the appropraite location on the page
+
     //===================== some issues here !!! =====================
     $('html,body').stop(true,false).animate({
         scrollTop: $(id).offset().top - 70

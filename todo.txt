@@ -50,7 +50,6 @@ catch errors if refresh returns error
 I realized that chrome doesnt animate the refresh when it is clicked
 
 Force default font as Roboto for consistency
-easter egg: if click hci logo 5 times go to rick roll
 
 PW and OP attachment (4 Attachments) bugs
 
@@ -69,3 +68,4 @@ i forsee that anyone with a screen <= 1366*768 needs to run the thing with 90% z
 Realized that the problem might be due to inline style instead of global style. Move then see what are the effects.
 Hover over full name will give the short name of the poster
 close message
+easter egg: if click hci logo 5 times go to rick roll
