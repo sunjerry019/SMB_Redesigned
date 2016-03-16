@@ -1,3 +1,11 @@
+===2016/03/16===
+Added short name of poster next to their name
+Hover over the poster name will give abbrname
+Added x to the message content so that it can be closed
+adjusted how the footer Login Date/Time is shown
+Added rick roll when you dblclick the hci logo
+Added HCI logo to chrome extension
+
 ===2015/10/04===
 changed the height adjustment for .msgcontent back to -5px from -(45+35) px **
 
