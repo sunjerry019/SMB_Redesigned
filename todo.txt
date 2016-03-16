@@ -55,8 +55,8 @@ easter egg: if click hci logo 5 times go to rick roll
 PW and OP attachment (4 Attachments) bugs
 
  == Multiselect ==
- use current message box?
- messages fly in from the right
+ add a vertically rectangular box that is only say 1/12 of the width to the right of the messages
+ shows how many messages are selected
  bulk action buttons
     - Mark all as read
     - Star all messages
