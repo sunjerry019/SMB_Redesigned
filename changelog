@@ -1,3 +1,7 @@
+===2016/04/10===
+added Ctrl + Alt + Shift + X for marking selected messages as read (actually I realize this isnt very useful because you actually take the same number of clicks, just a shorter time to go through everything because ajax)
+fixed he.encode bug that surfaces when title has quotation marks/unsafe characters
+
 ===2016/03/16===
 Added short name of poster next to their name
 Hover over the poster name will give abbrname
