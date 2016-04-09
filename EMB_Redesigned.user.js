@@ -5,11 +5,11 @@
 // @include			http://messages.hci.edu.sg/*
 // @require     	http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js
 // @require			https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js
-// @version     	3.14.21
+// @version     	3.14.22
 // @description     SMB with a new look, made for browsers that support more than IE
 // ==/UserScript==
 // License: CC BY 4.0 http://creativecommons.org/licenses/by/4.0/
-// Last updated: 16 March 2016
+// Last updated: 10 April 2016
 
 //Init vars
 var materialize = true;
@@ -989,7 +989,8 @@ function initializeMessages()
         }
         else
         {
-            var obj = $.parseJSON(he.decode($(this).closest("li")[0].dataset.obj));
+            //var obj = $.parseJSON(he.decode($(this).closest("li")[0].dataset.obj));
+            var obj = $.parseJSON($(this).closest("li")[0].dataset.obj);
             selectedMessages.push(obj);
             console.log('Selected Messages', selectedMessages);
             $(this).addClass("selected");
@@ -1016,7 +1017,7 @@ function initializeMessages()
         if(!$(this).hasClass("selected"))
         {
             //var msgobj = $.parseJSON(he.decode(this.dataset.obj));
-            var msgobj = $.parseJSON(he.decode(this.dataset.obj));
+            var msgobj = $.parseJSON(this.dataset.obj);
             if(!currentMessage)
             {
                 currentMessage = msgobj;
@@ -1083,7 +1084,8 @@ function initializeMessages()
                 $(ele).addClass("activated");
             }
 
-            var obj = $.parseJSON(he.decode($("#msg_" + ele.dataset.msgid).dataset.obj));
+            // var obj = $.parseJSON(he.decode($("#msg_" + ele.dataset.msgid).dataset.obj));
+            var obj = $.parseJSON($("#msg_" + ele.dataset.msgid)[0].dataset.obj);
             obj.marked = !obj.marked;
             $("#msg_" + ele.dataset.msgid).dataset.obj = he.encode(JSON.stringify(msgobj), {'useNamedReferences': true});
 
@@ -1484,7 +1486,8 @@ function fetchMessage(msgobj)
             });
 
             $("#choiceForm").on('submit', function(e){
-                var latestObject = $.parseJSON(he.decode($("#msg_" + msgobj.uid).attr("data-obj")));
+                //var latestObject = $.parseJSON(he.decode($("#msg_" + msgobj.uid).attr("data-obj")));
+                var latestObject = $.parseJSON($("#msg_" + msgobj.uid).attr("data-obj"));
                 var attn = latestObject.marked ? "A" : "B"; //"A" is yes, "B" is no
                 var data = $(this).serialize().split("&");
                 var dataObj = {
