@@ -5,7 +5,7 @@
 // @include			http://messages.hci.edu.sg/*
 // @require     	http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js
 // @require			https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js
-// @version     	3.14.20
+// @version     	3.14.21
 // @description     SMB with a new look, made for browsers that support more than IE
 // ==/UserScript==
 // License: CC BY 4.0 http://creativecommons.org/licenses/by/4.0/
@@ -982,6 +982,7 @@ function initializeMessages()
                 return obj.uid != uid;
             });
             //credit https://stackoverflow.com/questions/15287865/remove-array-element-based-on-object-property#15287938
+            console.log('Selected Messages', selectedMessages);
             $(this).removeClass("selected");
             $(this).closest("li").removeClass("selected");
             $(this).html(this.dataset.letter);
@@ -990,6 +991,7 @@ function initializeMessages()
         {
             var obj = $.parseJSON(he.decode($(this).closest("li")[0].dataset.obj));
             selectedMessages.push(obj);
+            console.log('Selected Messages', selectedMessages);
             $(this).addClass("selected");
             $(this).closest("li").addClass("selected");
             $(this).html('<i style="line-height: 42px; transform: rotatey(180deg)" class="material-icons">check</i>');
@@ -998,11 +1000,22 @@ function initializeMessages()
         e.stopPropagation();
     });
 
+    $(window).keypress(function(e)
+    {
+        if (e.shiftKey && e.ctrlKey && e.altKey && (e.key == 'X')) //mark all as read
+        {
+            handelnNachrichten('MarkAllAsRead');
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    });
+
     $(".collection-item").click(function(e) {
 
         //check not selected
         if(!$(this).hasClass("selected"))
         {
+            //var msgobj = $.parseJSON(he.decode(this.dataset.obj));
             var msgobj = $.parseJSON(he.decode(this.dataset.obj));
             if(!currentMessage)
             {
@@ -1085,6 +1098,63 @@ function initializeMessages()
 
         e.stopPropagation();
     });
+}
+
+function handelnNachrichten (typ)
+{
+    if (typ == "MarkAllAsRead")
+    {
+        var count = 0;
+        var errCount = 0;
+        var readingAjaxes = [];
+        $.each(selectedMessages, function(idx, nachricht)
+        {
+            console.log("Reading", nachricht.title);
+            readingAjaxes.push($.ajax({
+                url: nachricht.href,
+                dataType: "html",
+                method: "GET",
+                async: true,
+                success: function(data, textStatus, jqXHR){
+                    var response = $('<html />').html(data);
+                    //credit https://stackoverflow.com/questions/405409/use-jquery-selectors-on-ajax-loaded-html#7831229
+                    var error = false;
+                    error = /No such file or directory\)/gi.test(response.find("body").text());
+
+                    if(!error)
+                    {
+                        console.info("Read", nachricht.title);
+                        if(!nachricht.read)
+                        {
+                            nachricht.read = true;
+                            $("#msg_" + nachricht.uid + " .title").removeClass("unread");
+                            $("#msg_" + nachricht.uid).attr("data-obj", he.encode(JSON.stringify(nachricht), {'useNamedReferences': true}));
+                            count ++;
+                        }
+                    }
+                    else
+                    {
+                        errCount ++;
+                        console.error("No such file or directory while retreiving [" + nachricht.title + "]");
+                        toast("Error while trying to read messages. See Web Console (F12) for more information.");
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    /*show error*/
+                    // TO DO !!!!!
+                    err("Error: " + errorThrown);
+                }
+            }));
+        });
+
+        $.when.apply($, readingAjaxes).done(function(){/*everything done*/}).fail(function() {}).always(function()
+        {
+            console.log(count, errCount);
+            toast(count + " Message" + (count != 1 ? "s" : "") + " Read!" + (errCount > 0 ? (" " + errCount + " Error" + (errCount > 1 ? "s" : "") + " encountered.") : ""));
+        });
+
+    }
+
 }
 
 function init()
