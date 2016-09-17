@@ -15,7 +15,7 @@ Made 2015 in good faith.
 USE AT YOUR OWN RISK.
 WE ARE NOT LIABLE FOR YOUR USE OF THIS SCRIPT.
 
-The creator(s) play(s) no part in the publicity of this script. It is also no longer actively maintained because *sunjerry019* has decided he needs to study for the A Levels. Feel free to contact me if you want to take over this repo. 
+The creator(s) play(s) no part in the publicity of this script. It is also no longer actively maintained because *sunjerry019* has decided he needs to study for the A Levels. Feel free to contact him if you want to take over this repo. 
 
 > Do not go gentle into that good night.
 
