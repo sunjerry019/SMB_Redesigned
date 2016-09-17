@@ -10,6 +10,7 @@ Feel free to fork this repo! We do hope that this script inspires more people to
 To use, install Greasemonkey on Firefox before installing the userscript. 
 For chrome users, please download the crx file and install it manually by dragging it to your chrome://extensions/ page. Note however, that certain features seems to not work properly in Chrome.
 
+## Disclaimers?
 Made 2015 in good faith.
 
 USE AT YOUR OWN RISK.
