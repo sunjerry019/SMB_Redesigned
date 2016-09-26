@@ -3,13 +3,13 @@
 // @namespace   	http://eccube.tk/
 // @include     	http://messages.hci.edu.sg/
 // @include			http://messages.hci.edu.sg/*
-// @require     	http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js
+// @require     	https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js
 // @require			https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js
-// @version     	3.14.22
+// @version     	3.14.23
 // @description     SMB with a new look, made for browsers that support more than IE
 // ==/UserScript==
 // License: CC BY 4.0 http://creativecommons.org/licenses/by/4.0/
-// Last updated: 10 April 2016
+// Last updated: 26 September 2016
 
 //Init vars
 var materialize = true;
