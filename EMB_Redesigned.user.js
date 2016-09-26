@@ -1457,7 +1457,7 @@ function fetchMessage(msgobj)
             {
                 msgobj.read = true;
                 $("#msg_" + msgobj.uid + " .title").removeClass("unread");
-                $("#msg_" + msgobj.uid).attr("data-obj", he.encode(JSON.stringify(msgobj), {'useNamedReferences': true}));
+                $("#msg_" + msgobj.uid).attr("data-obj", JSON.stringify(msgobj));
             }
             $(".cnt").html(head.join("") + body.join(""));
             $(".row.hidden").removeClass("hidden");
