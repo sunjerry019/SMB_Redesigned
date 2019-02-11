@@ -52,18 +52,12 @@ After going into the board, we can view the messages posted there.
 Herein lies the heavylifting of the script, so let me break it down on how it works:
 1. Add a full white overlay on the entire screen to hide the original contents and a progress bar at the top to provide some loading animations.
 2. Parse the DOM with Javascript to extract all the links, properties (e.g. poster, post date) and any associated types of the messages (e.g. Importance, requires response, etc. )
-
-    a. There are usually 2 frames (not even iframes) on the original page, one for the header (with links to Archives, Settings, Other Board, etc. ), one for the actual content.
-
-    b. It was a headache to parse the already loaded dom as the page could be accessed from various endpoints that give different page layouts, making a lot of special cases necessary, so it was easier for the script to make a new AJAX request and parse the returned content (controlled and defined)
-
-    c. 2 &times; AJAX requests will be made, one to the "top bar" and one to the page with the content.
-
-    d. Parse the data (including if the login cookie is not set)
-
-        i. If the AJAX was unsuccessful, a red warning box will be shown to redirect the user back to the log in page. However, instead of simply redirecting to the login (The first screenshot), the link brings the user to the logout endpoint to ensure a clean clearing of cookies, and then the log out endpoint automatically redirects to the log in page.
-        
-    e. All metadata are then embedded into the DOM through data attributes.
+    1. There are usually 2 frames (not even iframes) on the original page, one for the header (with links to Archives, Settings, Other Board, etc. ), one for the actual content.
+    2. It was a headache to parse the already loaded dom as the page could be accessed from various endpoints that give different page layouts, making a lot of special cases necessary, so it was easier for the script to make a new AJAX request and parse the returned content (controlled and defined)
+    3. 2 &times; AJAX requests will be made, one to the "top bar" and one to the page with the content.  
+    4. Parse the data (including if the login cookie is not set)
+        1. If the AJAX was unsuccessful, a red warning box will be shown to redirect the user back to the log in page. However, instead of simply redirecting to the login (The first screenshot), the link brings the user to the logout endpoint to ensure a clean clearing of cookies, and then the log out endpoint automatically redirects to the log in page.
+    5. All metadata are then embedded into the DOM through data attributes.
 3. Delete the old content on the page
 4. Sort the messages
 5. Iterate through the messages and add them to the list of messages.
