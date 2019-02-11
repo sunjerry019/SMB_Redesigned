@@ -52,6 +52,7 @@ After going into the board, we can view the messages posted there.
 Herein lies the heavylifting of the script, so let me break it down on how it works:
 1. Add a full white overlay on the entire screen to hide the original contents and a progress bar at the top to provide some loading animations.
 2. Parse the DOM with Javascript to extract all the links, properties (e.g. poster, post date) and any associated types of the messages (e.g. Importance, requires response, etc. )
+
     a. There are usually 2 frames (not even iframes) on the original page, one for the header (with links to Archives, Settings, Other Board, etc. ), one for the actual content.
     b. It was a headache to parse the already loaded dom as the page could be accessed from various endpoints that give different page layouts, making a lot of special cases necessary, so it was easier for the script to make a new AJAX request and parse the returned content (controlled and defined)
     c. 2 &times; AJAX requests will be made, one to the "top bar" and one to the page with the content.
