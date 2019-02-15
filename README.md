@@ -81,10 +81,12 @@ Should the message require any form of response, a response box is placed at the
 
 The original SMB also provided this "Mark this message" feature that honestly wasn't very well implemented. For one, you have to actually *submit a HTML form* to mark a message. If you use any other ways of navigating e.g. bookmarks, you won't be able to mark the message. However, my redesign solves this problem by making it much more accessible as a "Star this message" that submits this HTML form via AJAX. It still uses the "Mark this message" backend. You can even mark a message without opening it first.
 
-Original:
+The original:   
+
 ![Mark This Message Old](https://github.com/sunjerry019/SMB_Redesigned/raw/master/screenshots/markthismsg_o.jpg "Notice how I have to click submit to mark.")
 
-New:
+The new and improved:  
+
 ![Mark This Message](https://github.com/sunjerry019/SMB_Redesigned/raw/master/screenshots/markthismsg.jpg "Notice the star at the top right corner")
 
 Should the message have any form of attachments, the links to the attachments are parsed, and an icon is added to the attachment title. If the user is using firefox, the icon is loaded with `moz-icon://.<extension>`, otherwise, it is loaded with `//ssl.gstatic.com/docs/doclist/images/mediatype/icon_1_<type>_x32.png`. If the attachment has a name, the name will also be displayed, or else it will be displayed as "Attach *N*".
