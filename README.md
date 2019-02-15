@@ -65,9 +65,11 @@ The entire board starts with the list of messages, arranged according to importa
 
 ![First Load View](https://github.com/sunjerry019/SMB_Redesigned/raw/master/screenshots/firstload.jpg "First Load View")
 
-Every message has a profile picture, that isn't really a picture, but a circle with the first letter of the username of the poster and a (mostly unique) background color. This background colour is generated programmatically from their username with a simple algorithm, and then tested for sufficient contrast for a white letter to be placed over it. If there isn't enough contrast (e.g. pastel pink was generated), the opposite colour is chosen by flipping the `V` of the `HSV` by 180&deg;. If there still isn't enough contrast, `HSL` luminescence is turned down in steps of `0.05` until there exists enough contrast to place white letter over it. This ensures that every poster has their own (most likely unique) colour, and there is no need to store the colour data anywhere to ensure that it is consistent across reloads, and even across devices/browsers.
+Every message has an avatar, that isn't really a picture, but a circle with the first letter of the username of the poster and a (mostly unique) background color. This background colour is generated programmatically from their username with a simple algorithm, and then tested for sufficient contrast for a white letter to be placed over it. If there isn't enough contrast (e.g. pastel pink was generated), the opposite colour is chosen by flipping the `V` of the `HSV` by 180&deg;. If there still isn't enough contrast, `HSL` luminescence is turned down in steps of `0.05` until there exists enough contrast to place white letter over it. This ensures that every poster has their own (most likely unique) colour, and there is no need to store the colour data anywhere to ensure that it is consistent across reloads, and even across devices/browsers.
 
 ![Example Message](https://github.com/sunjerry019/SMB_Redesigned/raw/master/screenshots/msg.jpg "Example Message")
+
+You may also click on this "avatar" to select multiple messages. Once a group of messages is selected, you may use `Ctrl + Shift + X` to mark all these selected messages as read instead of repeatedly opening each message and waiting for the messages to load.
 
 [dotdotdot](https://github.com/FrDH/dotdotdot-JS) is used to truncate any titles or content that is too log for the display box.
 
