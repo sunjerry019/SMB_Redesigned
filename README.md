@@ -73,7 +73,7 @@ Every message has a profile picture, that isn't really a picture, but a circle w
 
 Once the message is opened, an AJAX request is made to obtain the message. The DOM response is then parsed and put into the right message pane.
 
-![Message Pane](https://github.com/sunjerry019/SMB_Redesigned/raw/master/screenshots/messagepane.jpg "Message Pane")
+![Message Pane](https://github.com/sunjerry019/SMB_Redesigned/raw/master/screenshots/messagepane.png "Message Pane")
 
 Should the message require any form of response, a response box is placed at the bottom with the 5 options A, B, C, D, and E, and a textarea. Once the user clicks submit, another AJAX request is made to the server to submit the response. Toasts are used to provide the user with feedback and confirmation.
 
