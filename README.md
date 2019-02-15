@@ -61,7 +61,7 @@ Herein lies the heavylifting of the script, so let me break it down on how it wo
 5. Iterate through the messages and add them to the list of messages.
 6. Fade in the entire page, newly styled.
 
-The entire board starts with the list of messages, arranged according to importance, with unread messages at the top. Once a message is opened, the message list shrinks to the left, and the message loads on the right. To put it in a more visual way, it kind of looks like GMail on a tablet.
+The entire board starts with the list of messages, arranged according to importance, with unread messages at the top. Once a message is opened, the message list shrinks to the left, and the message loads on the right. To put it in a more visual way, it kind of looks like GMAIL on a tablet.
 
 ![First Load View](https://github.com/sunjerry019/SMB_Redesigned/raw/master/screenshots/firstload.jpg "First Load View")
 
@@ -79,13 +79,15 @@ Should the message require any form of response, a response box is placed at the
 
 ![Response](https://github.com/sunjerry019/SMB_Redesigned/raw/master/screenshots/needresponse.png "Requires Response")
 
-The original SMB also provided this "Mark this message" feature that honestly wasn't very well implemented. For one, you have to actually *submit a HTML form* to mark a message. If you use any other ways of navigating e.g. bookmarks, you won't be able to mark the message. However, my redesign solves this problem by making it much more accessible as a "Star this message" that submits this HTML form via AJAX. It still uses the "Mark this message" backend. You can even mark a message without opening it first.
+The original SMB also provided this `Mark this message` feature that honestly wasn't very well implemented. For one, you have to actually *submit a HTML form* to mark a message. If you use any other ways of navigating e.g. bookmarks, you won't be able to mark the message. In my redesign, I made the `Mark this message` into a `Star this message` that still uses the original backend, but uses AJAX requests to submit the abovementioned form so that one can mark multiple messages without reloading.
+
+This actually became rather useful since starred messages appear at the top regardless of whether one has read it.
 
 The original:   
 
 ![Mark This Message Old](https://github.com/sunjerry019/SMB_Redesigned/raw/master/screenshots/markthismsg_o.jpg "Notice how I have to click submit to mark.")
 
-The new and improved:  
+The new and improved (notice the star):  
 
 ![Mark This Message](https://github.com/sunjerry019/SMB_Redesigned/raw/master/screenshots/markthismsg.jpg "Notice the star at the top right corner")
 
@@ -97,6 +99,6 @@ At the top of the page, there is a refresh button that makes AJAX request on dem
 
 The colour theme of the entire page is also customizable by the user by the magic of [Materialize CSS](https://materializecss.com/).
 
-There might be some features I have missed out on, but this should be the juice :) Most of these screenshots are what I found digging through my archives, feel free to go to [the screenshots folder](//github.com/sunjerry019/SMB_Redesigned/tree/master/screenshots/archive)) to take a look at some of the other old screenshots, including some in between progress pics.
+There might be some features I have missed out on, but this should be the juice :) Most of these screenshots are what I found digging through my archives, feel free to go to [the screenshots folder](//github.com/sunjerry019/SMB_Redesigned/tree/master/screenshots/archive) to take a look at some of the other old screenshots, including some in between progress pics.
 
 I would also like to use this opportunity to say that I used jQuery because it was just more convenient (with AJAX, event listeners and stuff), and honestly performance was not crucial in this application :/ Stop bugging me about it .-.
