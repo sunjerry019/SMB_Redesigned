@@ -41,8 +41,6 @@ After you log in, you will be greeted with this menu of the different boards. Th
 
 ![Boards](https://github.com/sunjerry019/SMB_Redesigned/raw/master/screenshots/boards.jpg "Boards")
 
-These actually use badges so it shows how many new messages there are on the board.
-
 As a comparison, this was the original:
 
 ![Boards](https://github.com/sunjerry019/SMB_Redesigned/raw/master/screenshots/boards_o.jpg "Boards")
@@ -65,6 +63,8 @@ Herein lies the heavylifting of the script, so let me break it down on how it wo
 
 The entire board starts with the list of messages, arranged according to importance, with unread messages at the top. Once a message is opened, the message list shrinks to the left, and the message loads on the right. To put it in a more visual way, it kind of looks like GMail on a tablet.
 
+![First Load View](https://github.com/sunjerry019/SMB_Redesigned/raw/master/screenshots/firstload.jpg "First Load View")
+
 Every message has a profile picture, that isn't really a picture, but a circle with the first letter of the username of the poster and a (mostly unique) background color. This background colour is generated programmatically from their username with a simple algorithm, and then tested for sufficient contrast for a white letter to be placed over it. If there isn't enough contrast (e.g. pastel pink was generated), the opposite colour is chosen by flipping the `V` of the `HSV` by 180&deg;. If there still isn't enough contrast, `HSL` luminescence is turned down in steps of `0.05` until there exists enough contrast to place white letter over it. This ensures that every poster has their own (most likely unique) colour, and there is no need to store the colour data anywhere to ensure that it is consistent across reloads, and even across devices/browsers.
 
 ![Example Message](https://github.com/sunjerry019/SMB_Redesigned/raw/master/screenshots/msg.jpg "Example Message")
@@ -73,14 +73,28 @@ Every message has a profile picture, that isn't really a picture, but a circle w
 
 Once the message is opened, an AJAX request is made to obtain the message. The DOM response is then parsed and put into the right message pane.
 
+![Message Pane](https://github.com/sunjerry019/SMB_Redesigned/raw/master/screenshots/messagepane.jpg "Message Pane")
+
 Should the message require any form of response, a response box is placed at the bottom with the 5 options A, B, C, D, and E, and a textarea. Once the user clicks submit, another AJAX request is made to the server to submit the response. Toasts are used to provide the user with feedback and confirmation.
 
-Should the message have any form of attachments, the links to the attachments are parsed, and an icon is added to the attachment title. If the user is using firefox, the icon is loaded with `moz-icon://.<extension>`, otherwise, it is loaded with `//ssl.gstatic.com/docs/doclist/images/mediatype/icon_1_<type>_x32.png`.
+![Response](https://github.com/sunjerry019/SMB_Redesigned/raw/master/screenshots/needresponse.jpg "Requires Response")
+
+The original SMB also provided this "Mark this message" feature that honestly wasn't very well implemented. For one, you have to actually *submit a HTML form* to mark a message. If you use any other ways of navigating e.g. bookmarks, you won't be able to mark the message. However, my redesign solves this problem by making it much more accessible as a "Star this message" that submits this HTML form via AJAX. It still uses the "Mark this message" backend. You can even mark a message without opening it first.
+
+Original:
+![Mark This Message Old](https://github.com/sunjerry019/SMB_Redesigned/raw/master/screenshots/markthismsg_o.jpg "Notice how I have to click submit to mark.")
+
+New:
+![Mark This Message](https://github.com/sunjerry019/SMB_Redesigned/raw/master/screenshots/markthismsg.jpg "Notice the star at the top right corner")
+
+Should the message have any form of attachments, the links to the attachments are parsed, and an icon is added to the attachment title. If the user is using firefox, the icon is loaded with `moz-icon://.<extension>`, otherwise, it is loaded with `//ssl.gstatic.com/docs/doclist/images/mediatype/icon_1_<type>_x32.png`. If the attachment has a name, the name will also be displayed, or else it will be displayed as "Attach *N*".
+
+![Attachment](https://github.com/sunjerry019/SMB_Redesigned/raw/master/screenshots/attachment.jpg "Attachment")
 
 At the top of the page, there is a refresh button that makes AJAX request on demand to check for new messages. The script also checks for new messages in the background every 2 minutes. Browser notifications for new messages are also shown should the user have them enabled.
 
 The colour theme of the entire page is also customizable by the user by the magic of [Materialize CSS](https://materializecss.com/).
 
-There might be some features I have missed out, but this should be the juice already.
+There might be some features I have missed out on, but this should be the juice :) Most of these screenshots are what I found digging through my archives, feel free to go to [the screenshots folder](//github.com/sunjerry019/SMB_Redesigned/tree/master/screenshots/archive)) to take a look at some of the other old screenshots, including some in between progress pics.
 
 I would also like to use this opportunity to say that I used jQuery because it was just more convenient (with AJAX, event listeners and stuff), and honestly performance was not crucial in this application :/ Stop bugging me about it .-.
