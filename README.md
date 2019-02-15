@@ -9,8 +9,8 @@ Feel free to fork this repo! We do hope that this script inspires more people to
 "Many a little makes a mickle."
 
 ## Greasemonkey Userscript
-To use, first install Greasemonkey on Firefox if it is not installed already, then install this userscript.
-For users on Google Chrome, please download the crx file and install it manually by dragging it to your chrome://extensions/ page. However, note that certain features seems to not work properly in Chrome.
+To use, first install Greasemonkey on Firefox if it is not installed already, then install [this userscript](https://github.com/sunjerry019/SMB_Redesigned/raw/master/EMB_Redesigned.min.user.js).
+For users on Google Chrome, please download the crx file and install it manually by dragging it to your `chrome://extensions/` page. However, note that certain features seems to not work properly in Chrome.
 
 ## Disclaimers?
 Made in 2015 in good faith.
